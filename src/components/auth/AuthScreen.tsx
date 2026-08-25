@@ -143,10 +143,15 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
     try {
       const { data, error } = await signUp(email.trim(), password);
       if (error) {
-        if (error.message.includes('already registered')) {
+        const msg = error.message || '';
+        if (msg.includes('already registered')) {
           setErrorMsg('An account with this email already exists. Try logging in.');
+        } else if (msg.includes('rate limit') || msg.includes('over_email_send_rate_limit')) {
+          setErrorMsg('Email rate limit exceeded. Please wait a few minutes or disable email confirmation in Supabase Dashboard.');
+        } else if (msg.includes('Failed to fetch') || msg.includes('fetch')) {
+          setErrorMsg('Failed to connect to authentication server. Please check your Supabase Environment Variables on Vercel.');
         } else {
-          setErrorMsg(error.message || 'Failed to sign up.');
+          setErrorMsg(msg || 'Failed to sign up.');
         }
       } else {
         if (data?.session) {
@@ -156,7 +161,12 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         }
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'An unexpected error occurred during sign up.');
+      const msg = err?.message || '';
+      if (msg.includes('Failed to fetch') || msg.includes('fetch')) {
+        setErrorMsg('Failed to connect to authentication server. Please check your Supabase Environment Variables on Vercel.');
+      } else {
+        setErrorMsg(msg || 'An unexpected error occurred during sign up.');
+      }
     } finally {
       setIsLoading(false);
     }
