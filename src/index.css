@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-800: #115e59;
+  --color-brand-900: #134e4a;
+}
+
+@layer base {
+  :root {
+    /* LIGHT THEME VARIABLES — HIGH CONTRAST & LEGIBILITY */
+    --color-bg: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-elevated: #f1f5f9;
+    --color-border: #cbd5e1;
+    --color-border-hover: #94a3b8;
+    --color-text-primary: #020617;       /* Pure deep charcoal/black primary */
+    --color-text-secondary: #334155;     /* High contrast slate secondary */
+    --color-text-muted: #64748b;         /* Readable tertiary */
+    --color-accent: #0d9488;
+    --color-accent-hover: #0f766e;
+    --color-accent-light: #f0fdfa;
+    --color-accent-glow: rgba(13, 148, 136, 0.15);
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --shadow-card-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+    --card-gradient: #ffffff;
+    --accent-badge-bg: #f0fdfa;
+    --accent-badge-border: #99f6e4;
+    --accent-badge-text: #0f766e;
+  }
+
+  .dark {
+    /* DARK THEME VARIABLES — CLEAN MODERN SAAS */
+    --color-bg: #090d16;
+    --color-surface: #111726;
+    --color-surface-elevated: #172033;
+    --color-border: #1e293b;
+    --color-border-hover: #334155;
+    --color-text-primary: #f8fafc;       /* Crisp bright white primary */
+    --color-text-secondary: #94a3b8;     /* Balanced medium slate secondary */
+    --color-text-muted: #64748b;         /* Subtle readable tertiary */
+    --color-accent: #14b8a6;
+    --color-accent-hover: #2dd4bf;
+    --color-accent-light: rgba(20, 184, 166, 0.1);
+    --color-accent-glow: rgba(20, 184, 166, 0.25);
+    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+    --shadow-card-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(20, 184, 166, 0.2);
+    --card-gradient: linear-gradient(180deg, #111726 0%, #0d121f 100%);
+    --accent-badge-bg: rgba(20, 184, 166, 0.1);
+    --accent-badge-border: rgba(20, 184, 166, 0.25);
+    --accent-badge-text: #2dd4bf;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Accessible Focus Ring Global Rules */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+/* Custom Utilities & Components */
+@layer utilities {
+  .bg-surface-gradient {
+    background: var(--card-gradient);
+  }
+  .border-theme {
+    border-color: var(--color-border);
+  }
+  .border-theme-hover {
+    border-color: var(--color-border-hover);
+  }
+  .text-theme-primary {
+    color: var(--color-text-primary);
+  }
+  .text-theme-secondary {
+    color: var(--color-text-secondary);
+  }
+  .text-theme-muted {
+    color: var(--color-text-muted);
+  }
+  .badge-teal {
+    background-color: var(--accent-badge-bg);
+    border: 1px solid var(--accent-badge-border);
+    color: var(--accent-badge-text);
+  }
+}
+
+/* Keyframes for animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Restrained smooth animations */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
