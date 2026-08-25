@@ -14,8 +14,10 @@ export function generateStructuredPrompt(
   responsiveReq?: ResponsiveReqState,
   techStack?: TechnicalStackState,
   buildRules?: AIBuildRulesState,
-  modifier?: ResultModifierType
+  modifier?: ResultModifierType,
+  outputLanguage?: string
 ): string {
+  const lang = outputLanguage || 'English';
   const idea = ideaText.trim() || 'A high-converting, modern digital web application.';
   const type = projectDetails.websiteType || 'SaaS';
   const style = projectDetails.visualStyle || 'Modern';
@@ -78,16 +80,18 @@ export function generateStructuredPrompt(
    AI PROMPT ARCHITECT — MASTER PROMPT SPECIFICATION
    Target Engine: ${buildTarget}
    Prompt Mode: ${mode} (${outputStyle})
+   Output Language: ${lang}
    ${modifier ? `[Applied Tone Adjustment: ${modifier}]` : ''}
    ========================================================================== */`);
 
   if (toggles.strategy) {
     sections.push(`## 01 — ROLE & STRATEGIC OBJECTIVE
-Act as a Senior Frontend Engineer and Lead UI/UX Architect. Build a production-ready, highly responsive ${type} website.
+Act as a Senior Frontend Engineer and Lead UI/UX Architect. Build a production-ready, highly responsive ${type} website in ${lang}.
 - Brand / Project Name: ${brandName}
 - Industry Category: ${industry}
 - Primary Business Goal: ${goal}
 - Primary CTA Label: ${primaryCTA}
+- Output Language: ${lang}
 - Target Builder Tool: Optimized for ${buildTarget}
 - Output Specification Format: ${outputStyle}`);
   }

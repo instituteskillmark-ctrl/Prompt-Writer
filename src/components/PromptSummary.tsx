@@ -1,16 +1,18 @@
 import React from 'react';
-import { Compass, CheckCircle2, Layers } from 'lucide-react';
+import { Compass, CheckCircle2, Layers, Globe } from 'lucide-react';
 import type { ProjectDetailsState } from './ProjectDetails';
 import type { CreativeDirectionState } from './CreativeDirection';
 
 interface PromptSummaryProps {
   projectDetails: ProjectDetailsState;
   creativeDirection: CreativeDirectionState;
+  outputLanguage?: string;
 }
 
 export const PromptSummary: React.FC<PromptSummaryProps> = ({
   projectDetails,
-  creativeDirection
+  creativeDirection,
+  outputLanguage = 'English'
 }) => {
   const coverageCheckpoints = [
     { label: 'Structure', verified: true },
@@ -33,6 +35,16 @@ export const PromptSummary: React.FC<PromptSummaryProps> = ({
         </div>
 
         <div className="space-y-3">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-theme-muted font-medium flex items-center space-x-1">
+              <Globe className="w-3.5 h-3.5 text-brand-500" />
+              <span>Output Language:</span>
+            </span>
+            <span className="font-extrabold text-brand-500 px-2 py-0.5 rounded bg-brand-500/10 border border-brand-500/30">
+              {outputLanguage}
+            </span>
+          </div>
+
           <div className="flex items-center justify-between text-xs">
             <span className="text-theme-muted font-medium">Type:</span>
             <span className="font-semibold text-theme-primary px-2 py-0.5 rounded bg-surface-elevated border border-theme">

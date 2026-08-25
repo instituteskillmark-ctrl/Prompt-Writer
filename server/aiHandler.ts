@@ -5,6 +5,8 @@ import process from 'node:process';
 
 export interface GeneratorStatePayload {
   ideaText?: string;
+  customIdea?: string;
+  outputLanguage?: string;
   projectDetails?: {
     websiteType?: string;
     visualStyle?: string;
@@ -50,7 +52,8 @@ export interface GeneratorStatePayload {
  */
 
 export function buildAiPromptFromState(payload: GeneratorStatePayload): string {
-  const idea = payload.ideaText?.trim() || 'A high-converting digital web application.';
+  const idea = payload.customIdea?.trim() || payload.ideaText?.trim() || 'A high-converting digital web application.';
+  const outputLang = payload.outputLanguage || 'English';
   const type = payload.projectDetails?.websiteType || 'SaaS';
   const visualStyle = payload.projectDetails?.visualStyle || 'Modern';
   const audience = payload.projectDetails?.targetAudience || 'Target users';
@@ -86,6 +89,7 @@ export function buildAiPromptFromState(payload: GeneratorStatePayload): string {
 
   return `Generate a comprehensive, production-ready Master Prompt for an AI Code Generator to build the following website:
 
+Output Language: ${outputLang} (${outputLang === 'Auto' ? 'Infer language from user custom idea' : `Write entire prompt in ${outputLang}`})
 Project Name: ${brandName}
 Industry: ${industry}
 Website Type: ${type} (Visual Persona: ${visualStyle})

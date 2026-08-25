@@ -11,6 +11,20 @@ export type WebsiteGoal =
   | 'Build Community'
   | 'Other';
 
+export type OutputLanguage = 
+  | 'English'
+  | 'Auto'
+  | 'Urdu'
+  | 'Hindi'
+  | 'Arabic'
+  | 'Spanish'
+  | 'French'
+  | 'German'
+  | 'Portuguese'
+  | 'Chinese'
+  | 'Japanese'
+  | 'Korean';
+
 export type UXPriority = 
   | 'Simplicity'
   | 'Conversion'

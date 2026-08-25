@@ -1,11 +1,12 @@
 import React from 'react';
-import { LayoutList, Sparkles, CheckCircle } from 'lucide-react';
+import { LayoutList, Sparkles, CheckCircle, Globe } from 'lucide-react';
 import type { ProjectDetailsState } from './ProjectDetails';
 import type { CreativeDirectionState } from './CreativeDirection';
 import type { AdvancedGeneratorState } from '../types/generator';
 
 interface LiveProjectSummaryProps {
   ideaText: string;
+  outputLanguage?: string;
   projectDetails: ProjectDetailsState;
   creativeDirection: CreativeDirectionState;
   advancedState: AdvancedGeneratorState;
@@ -13,6 +14,7 @@ interface LiveProjectSummaryProps {
 
 export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
   ideaText,
+  outputLanguage = 'English',
   projectDetails,
   creativeDirection,
   advancedState
@@ -77,7 +79,7 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
         </div>
       </div>
 
-      {/* 2. Live Project Summary */}
+      {/* 2. Live Project Summary Grid */}
       <div>
         <div className="flex items-center space-x-2 mb-3">
           <LayoutList className="w-4 h-4 text-brand-500" />
@@ -86,7 +88,7 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs font-mono">
           <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
             <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Type</span>
             <span className="font-bold text-theme-primary truncate block">{projectDetails.websiteType || 'SaaS'}</span>
@@ -102,29 +104,17 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
             <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme || 'Dark'}</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Layout</span>
-            <span className="font-bold text-theme-primary truncate block">{creativeDirection.layout || 'Minimal'}</span>
+          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme border-brand-500/30 bg-brand-500/5">
+            <span className="text-[10px] text-brand-500 font-extrabold flex items-center space-x-1 font-sans uppercase">
+              <Globe className="w-3 h-3 inline" />
+              <span>Language</span>
+            </span>
+            <span className="font-bold text-theme-primary truncate block">{outputLanguage}</span>
           </div>
 
           <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
             <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Goal</span>
             <span className="font-bold text-theme-primary truncate block">{advancedState.websiteGoal}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">UX Priority</span>
-            <span className="font-bold text-theme-primary truncate block">{advancedState.uxPriority}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Prompt Mode</span>
-            <span className="font-bold text-theme-primary truncate block">{advancedState.promptMode}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Build With</span>
-            <span className="font-bold text-theme-primary truncate block">{advancedState.buildTarget}</span>
           </div>
         </div>
       </div>

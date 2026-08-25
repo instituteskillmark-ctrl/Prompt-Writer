@@ -15,6 +15,7 @@ import type { BrandContextState, ResultModifierType } from '../types/brand';
 
 interface PromptResultProps {
   ideaText: string;
+  outputLanguage?: string;
   projectDetails: ProjectDetailsState;
   creativeDirection: CreativeDirectionState;
   brandContext: BrandContextState;
@@ -29,6 +30,7 @@ interface PromptResultProps {
 
 export const PromptResult: React.FC<PromptResultProps> = ({
   ideaText,
+  outputLanguage = 'English',
   projectDetails,
   creativeDirection,
   brandContext,
@@ -164,6 +166,7 @@ export const PromptResult: React.FC<PromptResultProps> = ({
           <PromptSummary
             projectDetails={projectDetails}
             creativeDirection={creativeDirection}
+            outputLanguage={outputLanguage}
           />
 
           {/* Section Navigation */}

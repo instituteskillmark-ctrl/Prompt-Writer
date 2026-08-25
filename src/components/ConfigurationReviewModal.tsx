@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Sparkles, ArrowRight, RotateCcw } from 'lucide-react';
+import { X, Sparkles, ArrowRight, RotateCcw, Globe } from 'lucide-react';
 import type { ProjectDetailsState } from './ProjectDetails';
 import type { CreativeDirectionState } from './CreativeDirection';
 import type { BrandContextState, TechnicalStackState } from '../types/brand';
@@ -10,6 +10,7 @@ interface ConfigurationReviewModalProps {
   onClose: () => void;
   onConfirmGenerate: () => void;
   ideaText: string;
+  outputLanguage?: string;
   projectDetails: ProjectDetailsState;
   creativeDirection: CreativeDirectionState;
   brandContext: BrandContextState;
@@ -22,6 +23,7 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
   onClose,
   onConfirmGenerate,
   ideaText,
+  outputLanguage = 'English',
   projectDetails,
   creativeDirection,
   brandContext,
@@ -62,7 +64,13 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
         <div className="overflow-y-auto space-y-4 pr-1 flex-1 font-mono text-xs">
           {/* Idea Excerpt */}
           <div className="p-3.5 rounded-xl bg-surface-elevated border border-theme space-y-1">
-            <span className="text-[10px] font-sans font-extrabold uppercase text-theme-muted">Website Idea</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-sans font-extrabold uppercase text-theme-muted">Website Idea</span>
+              <span className="text-[10px] font-bold text-brand-500 flex items-center space-x-1 font-sans">
+                <Globe className="w-3 h-3" />
+                <span>Output Language: {outputLanguage}</span>
+              </span>
+            </div>
             <p className="text-theme-primary line-clamp-3 leading-relaxed font-sans text-xs">
               "{ideaText || 'No description specified'}"
             </p>
@@ -89,9 +97,9 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
               <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme}</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Layout Grid</span>
-              <span className="font-bold text-theme-primary truncate block">{creativeDirection.layout}</span>
+            <div className="p-3 rounded-xl bg-surface-elevated border border-theme border-brand-500/30 bg-brand-500/5">
+              <span className="text-[10px] text-brand-500 block font-sans uppercase font-bold">Output Language</span>
+              <span className="font-bold text-theme-primary truncate block">{outputLanguage}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">

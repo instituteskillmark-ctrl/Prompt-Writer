@@ -9,6 +9,8 @@ const userRequestLogs = new Map<string, number[]>();
 
 export interface ProductionGeneratePayload {
   ideaText?: string;
+  customIdea?: string;
+  outputLanguage?: string;
   projectDetails?: {
     websiteType?: string;
     visualStyle?: string;
@@ -53,7 +55,8 @@ export interface ProductionGeneratePayload {
  * Constructs a comprehensive 17-section AI prompt specification server-side.
  */
 export function buildProductionAiInstruction(payload: ProductionGeneratePayload): string {
-  const idea = payload.ideaText?.trim() || 'A high-converting, modern digital web application.';
+  const idea = payload.customIdea?.trim() || payload.ideaText?.trim() || 'A high-converting, modern digital web application.';
+  const outputLang = payload.outputLanguage || 'English';
   const type = payload.projectDetails?.websiteType || 'SaaS';
   const visualStyle = payload.projectDetails?.visualStyle || 'Modern';
   const audience = payload.projectDetails?.targetAudience || 'Tech-savvy users and industry leads';
@@ -87,9 +90,17 @@ export function buildProductionAiInstruction(payload: ProductionGeneratePayload)
 
   const modifierNote = payload.modifier ? `\n[Tone & Improvement Modifier: ${payload.modifier}]` : '';
 
+  const langDirective = outputLang === 'Auto'
+    ? 'CRITICAL LANGUAGE DIRECTIVE: Infer the primary language of the user\'s custom idea text and generate the entire master website specification prompt in that exact language.'
+    : `CRITICAL LANGUAGE DIRECTIVE: Generate the entire master website specification prompt written in ${outputLang}.`;
+
   return `Construct a 17-part Master Website Specification Prompt for an AI Code Generator to build the following web application:
 
+${langDirective}
+PRESERVATION RULE: Keep technical terms, framework names (e.g. React, Next.js, Tailwind CSS), code identifiers, HTML/CSS attributes, and WCAG standards in standard code format without translating framework names. Translate all structural text, section descriptions, and instructions into ${outputLang === 'Auto' ? 'the detected input language' : outputLang}.
+
 1. PROJECT OBJECTIVE:
+- Output Language: ${outputLang}
 - Brand Name: ${brandName}
 - Industry: ${industry}
 - Website Type: ${type}
@@ -154,7 +165,7 @@ ${refUrl ? `- Reference Benchmark: ${refUrl}` : ''}
 - Avoid generic low-contrast gray text, enforce crisp visual contrast hierarchy.
 
 17. FINAL IMPLEMENTATION INSTRUCTIONS:
-- Deliver clean, production-grade modular code ready to run immediately.
+- Deliver clean, production-grade modular code ready to run immediately in ${outputLang === 'Auto' ? 'the detected language' : outputLang}.
 ${modifierNote}
 
 Organize the final response into clean numbered sections:

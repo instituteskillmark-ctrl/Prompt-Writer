@@ -52,7 +52,7 @@ import {
   toggleFavoriteInDb 
 } from './lib/db';
 import type { SavedPromptItem } from './utils/storage';
-import type { AdvancedGeneratorState, SectionToggles } from './types/generator';
+import type { AdvancedGeneratorState, SectionToggles, OutputLanguage } from './types/generator';
 import type { 
   BrandContextState, 
   DesignReferenceItem, 
@@ -89,6 +89,7 @@ function InnerApp() {
 
   // Form State (Card 01, Card 02, Card 03)
   const [ideaText, setIdeaText] = useState<string>('A high-converting SaaS landing page for an AI developer platform called "PulseMetrics". Features dark mode UI with interactive live dashboard previews, pricing calculator, integration logo cloud, customer ROI testimonials, and a prominent 14-day free trial CTA.');
+  const [outputLanguage, setOutputLanguage] = useState<OutputLanguage | string>('English');
   
   const [projectDetails, setProjectDetails] = useState<ProjectDetailsState>({
     websiteType: 'SaaS',
@@ -396,6 +397,7 @@ function InnerApp() {
   // Reset All Options
   const handleResetAll = () => {
     setIdeaText('');
+    setOutputLanguage('English');
     setProjectDetails({
       websiteType: 'SaaS',
       visualStyle: 'Modern',
@@ -468,7 +470,9 @@ function InnerApp() {
       designReferences,
       responsiveReq,
       techStack,
-      buildRules
+      buildRules,
+      undefined,
+      outputLanguage
     );
     setPromptContent(regenerated);
   };
@@ -479,6 +483,8 @@ function InnerApp() {
     const payload = {
       generatorState: {
         ideaText,
+        customIdea: ideaText,
+        outputLanguage,
         projectDetails,
         creativeDirection,
         brandContext,
@@ -504,7 +510,8 @@ function InnerApp() {
         responsiveReq,
         techStack,
         buildRules,
-        mod
+        mod,
+        outputLanguage
       );
       setPromptContent(fallback);
       showToast(aiRes.error || `Applied "${mod}" modifier`);
@@ -530,6 +537,8 @@ function InnerApp() {
     const payload = {
       generatorState: {
         ideaText,
+        customIdea: ideaText,
+        outputLanguage,
         projectDetails,
         creativeDirection,
         brandContext,
@@ -556,7 +565,9 @@ function InnerApp() {
         designReferences,
         responsiveReq,
         techStack,
-        buildRules
+        buildRules,
+        undefined,
+        outputLanguage
       );
     }
 
@@ -644,6 +655,11 @@ function InnerApp() {
                     <QuickPresets
                       onApplyPreset={handleApplyPreset}
                       onResetAll={handleResetAll}
+                      onStartFromScratch={() => {
+                        setIdeaText('');
+                        setOutputLanguage('English');
+                        showToast('Started from scratch! Enter your custom idea.');
+                      }}
                     />
 
                     {/* Prompt Readiness System */}
@@ -659,6 +675,7 @@ function InnerApp() {
                     {/* Live Project Summary Panel */}
                     <LiveProjectSummary
                       ideaText={ideaText}
+                      outputLanguage={outputLanguage}
                       projectDetails={projectDetails}
                       creativeDirection={creativeDirection}
                       advancedState={advancedState}
@@ -668,6 +685,8 @@ function InnerApp() {
                     <IdeaInput
                       value={ideaText}
                       onChange={handleIdeaChange}
+                      outputLanguage={outputLanguage}
+                      onLanguageChange={setOutputLanguage}
                       onOpenIdeasModal={() => setIsSampleModalOpen(true)}
                       validationError={validationError}
                     />
@@ -780,6 +799,7 @@ function InnerApp() {
               {viewMode === 'result' && (
                 <PromptResult
                   ideaText={ideaText}
+                  outputLanguage={outputLanguage}
                   projectDetails={projectDetails}
                   creativeDirection={creativeDirection}
                   brandContext={brandContext}
@@ -856,6 +876,7 @@ function InnerApp() {
         onClose={() => setIsReviewModalOpen(false)}
         onConfirmGenerate={handleConfirmGenerate}
         ideaText={ideaText}
+        outputLanguage={outputLanguage}
         projectDetails={projectDetails}
         creativeDirection={creativeDirection}
         brandContext={brandContext}
