@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutList, Sparkles, CheckCircle, Globe } from 'lucide-react';
+import { LayoutList, Globe, Sparkles } from 'lucide-react';
 import type { ProjectDetailsState } from './ProjectDetails';
 import type { CreativeDirectionState } from './CreativeDirection';
 import type { AdvancedGeneratorState } from '../types/generator';
@@ -19,114 +19,91 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
   creativeDirection,
   advancedState
 }) => {
-  const checkSection = (condition: boolean) => (condition ? 1 : 0);
-  
-  const configuredCount = 
-    checkSection(Boolean(ideaText.trim())) +
-    checkSection(Boolean(projectDetails.websiteType)) +
-    checkSection(Boolean(projectDetails.visualStyle)) +
-    checkSection(Boolean(projectDetails.targetAudience.trim())) +
-    checkSection(projectDetails.selectedPages.length > 0) +
-    checkSection(Boolean(creativeDirection.colorTheme)) +
-    checkSection(Boolean(creativeDirection.typography)) +
-    checkSection(Boolean(creativeDirection.layout)) +
-    checkSection(Boolean(advancedState.websiteGoal)) +
-    checkSection(Boolean(advancedState.uxPriority));
+  // Collect ONLY user-selected options (no guessed/invented defaults!)
+  const activeItems: { label: string; value: string }[] = [];
 
-  const totalSections = 10;
-  const progressPercent = Math.round((configuredCount / totalSections) * 100);
-
-  const getDesignTip = (): string => {
-    const style = projectDetails.visualStyle;
-    const type = projectDetails.websiteType;
-
-    if (style === 'Luxury' || style === 'Editorial') {
-      return 'Dark + Editorial typography + Asymmetric grid layout works best for luxury showcases.';
-    }
-    if (type === 'SaaS') {
-      return 'SaaS platforms perform best with Conversion UX priority, interactive pricing tables, and prominent CTAs.';
-    }
-    if (type === 'Portfolio') {
-      return 'Portfolios excel with Visual Impact UX priority, minimalist frames, and full-bleed image showcases.';
-    }
-    if (type === 'Restaurant') {
-      return 'Restaurant websites thrive with interactive menu tabs, online reservation widgets, and warm imagery.';
-    }
-    if (type === 'E-commerce') {
-      return 'E-commerce storefronts perform best with Product-first grids, instant drawer cart, and reviews.';
-    }
-    return 'Pair generous whitespace with crisp typography hierarchy and a single vibrant CTA color for optimal UX.';
-  };
+  if (ideaText.trim()) {
+    activeItems.push({ label: 'Idea', value: `${ideaText.trim().slice(0, 35)}${ideaText.trim().length > 35 ? '...' : ''}` });
+  }
+  if (outputLanguage) {
+    activeItems.push({ label: 'Language', value: outputLanguage });
+  }
+  if (projectDetails.websiteType) {
+    activeItems.push({ label: 'Type', value: projectDetails.websiteType });
+  }
+  if (projectDetails.visualStyle) {
+    activeItems.push({ label: 'Style', value: projectDetails.visualStyle });
+  }
+  if (creativeDirection.colorTheme) {
+    activeItems.push({ label: 'Theme', value: creativeDirection.colorTheme });
+  }
+  if (creativeDirection.layout) {
+    activeItems.push({ label: 'Layout', value: creativeDirection.layout });
+  }
+  if (creativeDirection.typography) {
+    activeItems.push({ label: 'Typography', value: creativeDirection.typography });
+  }
+  if (creativeDirection.animation) {
+    activeItems.push({ label: 'Animation', value: creativeDirection.animation });
+  }
+  if (advancedState.websiteGoal) {
+    activeItems.push({ label: 'Goal', value: advancedState.websiteGoal });
+  }
+  if (advancedState.uxPriority) {
+    activeItems.push({ label: 'UX Priority', value: advancedState.uxPriority });
+  }
+  if (advancedState.buildTarget) {
+    activeItems.push({ label: 'Build Target', value: advancedState.buildTarget });
+  }
+  if (advancedState.promptMode) {
+    activeItems.push({ label: 'Prompt Mode', value: advancedState.promptMode });
+  }
 
   return (
-    <div className="bg-surface border border-theme rounded-2xl p-5 shadow-card space-y-4">
-      {/* 1. Completeness Indicator */}
-      <div className="space-y-2 pb-3 border-b border-theme">
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center space-x-2 font-bold text-theme-primary">
-            <CheckCircle className="w-4 h-4 text-brand-500" />
-            <span>Prompt Setup Completeness</span>
-          </div>
-          <span className="font-mono text-brand-500 font-bold">{configuredCount} / {totalSections} configured</span>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full h-2 rounded-full bg-surface-elevated overflow-hidden border border-theme">
-          <div
-            className="h-full bg-gradient-to-r from-brand-600 to-teal-400 transition-all duration-300 rounded-full"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-      </div>
-
-      {/* 2. Live Project Summary Grid */}
-      <div>
-        <div className="flex items-center space-x-2 mb-3">
+    <div className="bg-surface border border-theme rounded-2xl p-5 shadow-card space-y-3">
+      <div className="flex items-center justify-between pb-2 border-b border-theme">
+        <div className="flex items-center space-x-2">
           <LayoutList className="w-4 h-4 text-brand-500" />
           <h3 className="text-xs font-extrabold tracking-widest text-theme-primary uppercase">
             PROJECT SUMMARY
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs font-mono">
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Type</span>
-            <span className="font-bold text-theme-primary truncate block">{projectDetails.websiteType || 'SaaS'}</span>
-          </div>
+        <span className="text-[10px] font-bold text-theme-muted">
+          {activeItems.length} active selections
+        </span>
+      </div>
 
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Style</span>
-            <span className="font-bold text-theme-primary truncate block">{projectDetails.visualStyle || 'Modern'}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Theme</span>
-            <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme || 'Dark'}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme border-brand-500/30 bg-brand-500/5">
-            <span className="text-[10px] text-brand-500 font-extrabold flex items-center space-x-1 font-sans uppercase">
-              <Globe className="w-3 h-3 inline" />
-              <span>Language</span>
+      {activeItems.length > 0 ? (
+        <div className="flex flex-wrap gap-2 text-xs font-mono">
+          {activeItems.map((item) => (
+            <div 
+              key={item.label} 
+              className={`p-2.5 rounded-xl border ${
+                item.label === 'Language' 
+                  ? 'border-brand-500/30 bg-brand-500/10' 
+                  : 'bg-surface-elevated border-theme'
+              }`}
+            >
+              <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase flex items-center space-x-1">
+                {item.label === 'Language' && <Globe className="w-3 h-3 text-brand-500" />}
+                <span>{item.label}</span>
+              </span>
+              <span className="font-bold text-theme-primary truncate block mt-0.5">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="py-3 px-4 rounded-xl bg-surface-elevated border border-theme text-xs text-theme-secondary flex items-center space-x-2">
+          <Sparkles className="w-4 h-4 text-brand-500 shrink-0" />
+          <div>
+            <span className="font-bold text-theme-primary block">Ready when you are.</span>
+            <span className="text-[11px] text-theme-muted">
+              Start with a website idea. You can customize the direction later.
             </span>
-            <span className="font-bold text-theme-primary truncate block">{outputLanguage}</span>
-          </div>
-
-          <div className="p-2.5 rounded-xl bg-surface-elevated border border-theme">
-            <span className="text-[10px] text-theme-secondary font-bold block font-sans uppercase">Goal</span>
-            <span className="font-bold text-theme-primary truncate block">{advancedState.websiteGoal}</span>
           </div>
         </div>
-      </div>
-
-      {/* 3. Rule-based Design Tip */}
-      <div className="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 text-xs flex items-start space-x-2.5">
-        <Sparkles className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
-        <div className="space-y-0.5">
-          <span className="font-bold text-brand-500 uppercase tracking-wide text-[10px] block">DESIGN TIP</span>
-          <p className="text-theme-secondary text-[11px] leading-relaxed">{getDesignTip()}</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

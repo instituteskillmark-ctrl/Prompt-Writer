@@ -79,22 +79,22 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Brand Name</span>
-              <span className="font-bold text-theme-primary truncate block">{brandContext.brandName || 'Unspecified'}</span>
+              <span className="font-bold text-theme-primary truncate block">{brandContext.brandName || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Website Type</span>
-              <span className="font-bold text-theme-primary truncate block">{projectDetails.websiteType}</span>
+              <span className="font-bold text-theme-primary truncate block">{projectDetails.websiteType || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Visual Style</span>
-              <span className="font-bold text-theme-primary truncate block">{projectDetails.visualStyle}</span>
+              <span className="font-bold text-theme-primary truncate block">{projectDetails.visualStyle || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Theme Mode</span>
-              <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme}</span>
+              <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme border-brand-500/30 bg-brand-500/5">
@@ -104,22 +104,22 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Goal</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.websiteGoal}</span>
+              <span className="font-bold text-theme-primary truncate block">{advancedState.websiteGoal || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">UX Priority</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.uxPriority}</span>
+              <span className="font-bold text-theme-primary truncate block">{advancedState.uxPriority || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Framework</span>
-              <span className="font-bold text-theme-primary truncate block">{techStack.framework}</span>
+              <span className="font-bold text-theme-primary truncate block">{techStack.framework || 'Auto (AI Decides)'}</span>
             </div>
 
             <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
               <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Build Target</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.buildTarget}</span>
+              <span className="font-bold text-theme-primary truncate block">{advancedState.buildTarget || 'Auto (AI Decides)'}</span>
             </div>
           </div>
 
@@ -127,6 +127,9 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
           <div className="p-3.5 rounded-xl bg-surface-elevated border border-theme space-y-2">
             <span className="text-[10px] font-sans font-extrabold uppercase text-theme-muted block">Configured Pages & Features</span>
             <div className="flex flex-wrap gap-1.5 font-sans">
+              {projectDetails.selectedPages.length === 0 && advancedState.selectedFeatures.length === 0 && (
+                <span className="text-xs text-theme-muted italic">Auto (AI Decides based on website idea)</span>
+              )}
               {projectDetails.selectedPages.map((p) => (
                 <span key={p} className="px-2 py-0.5 rounded badge-teal text-[10px] font-bold">
                   {p}

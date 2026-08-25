@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightbulb, RotateCcw, AlertCircle, Globe, Sparkles } from 'lucide-react';
+import { RotateCcw, AlertCircle, Globe, Sparkles } from 'lucide-react';
 import type { OutputLanguage } from '../types/generator';
 
 interface IdeaInputProps {
@@ -7,7 +7,7 @@ interface IdeaInputProps {
   onChange: (val: string) => void;
   outputLanguage: OutputLanguage | string;
   onLanguageChange: (lang: OutputLanguage | string) => void;
-  onOpenIdeasModal: () => void;
+  onOpenIdeasModal?: () => void;
   validationError?: string | null;
 }
 
@@ -52,7 +52,6 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
   onChange,
   outputLanguage,
   onLanguageChange,
-  onOpenIdeasModal,
   validationError
 }) => {
   const handleClear = () => {
@@ -66,57 +65,40 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
     <div className={`bg-surface border rounded-2xl p-5 sm:p-6 shadow-card hover:shadow-card-hover transition-all duration-300 ${
       validationError ? 'border-amber-500/80 ring-2 ring-amber-500/20' : 'border-theme'
     }`}>
-      {/* Header Section */}
+      {/* Hero Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-theme">
-        <div className="flex items-center space-x-3">
-          <div className="w-7 h-7 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center font-bold text-xs">
-            01
-          </div>
-          <div>
-            <h2 className="text-xs font-bold tracking-widest text-theme-primary uppercase">
-              YOUR WEBSITE IDEA
-            </h2>
-            <p className="text-[11px] text-theme-secondary font-medium mt-0.5">
-              Have an idea? Describe it in your own words.
-            </p>
-          </div>
+        <div>
+          <h2 className="text-sm sm:text-base font-extrabold tracking-tight text-theme-primary uppercase flex items-center space-x-2">
+            <span>WHAT DO YOU WANT TO BUILD?</span>
+          </h2>
+          <p className="text-xs text-theme-secondary font-medium mt-1">
+            Describe your website idea in your own words. No technical knowledge required.
+          </p>
         </div>
 
-        {/* Header Quick Actions */}
-        <div className="flex items-center space-x-2">
-          {value && (
-            <button
-              onClick={handleClear}
-              type="button"
-              className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg border border-theme bg-surface hover:bg-surface-elevated text-[11px] font-medium text-theme-muted hover:text-theme-primary transition-colors"
-              title="Clear input"
-            >
-              <RotateCcw className="w-3 h-3" />
-              <span>Clear</span>
-            </button>
-          )}
-
+        {value && (
           <button
-            onClick={onOpenIdeasModal}
+            onClick={handleClear}
             type="button"
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl badge-teal text-xs font-semibold hover:opacity-90 transition-opacity"
+            className="self-start sm:self-auto inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg border border-theme bg-surface hover:bg-surface-elevated text-[11px] font-medium text-theme-muted hover:text-theme-primary transition-colors"
+            title="Clear input"
           >
-            <Lightbulb className="w-3.5 h-3.5" />
-            <span>More Examples</span>
+            <RotateCcw className="w-3 h-3" />
+            <span>Clear</span>
           </button>
-        </div>
+        )}
       </div>
 
-      {/* Main Layout: Textarea + Controls */}
+      {/* Main Layout */}
       <div className="space-y-4">
         {/* Main Idea Textarea */}
         <div className="relative">
           <textarea
             value={value}
             onChange={(e) => onChange(e.target.value.slice(0, MAX_CHARS))}
-            placeholder={`Tell us what you want to build.\nExample: “I want a premium dark website for a creative AI agency with a portfolio, services, case studies, and a contact section.”`}
+            placeholder={`Example: “I want a premium website for a modern coffee brand with online ordering, a menu, customer reviews and a strong visual identity.”`}
             rows={5}
-            className={`w-full p-4 rounded-xl border bg-surface-elevated text-theme-primary placeholder-theme-muted text-sm font-normal focus:outline-none transition-all duration-200 resize-y min-h-[140px] leading-relaxed ${
+            className={`w-full p-4 rounded-xl border bg-surface-elevated text-theme-primary placeholder-theme-muted text-sm font-normal focus:outline-none transition-all duration-200 resize-y min-h-[150px] leading-relaxed ${
               validationError
                 ? 'border-amber-500 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20'
                 : 'border-theme focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20'
@@ -131,11 +113,11 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
             </div>
           )}
 
-          {/* Character Counter & Tip */}
+          {/* Character Counter */}
           <div className="mt-2 flex items-center justify-between text-xs text-theme-muted">
             <div className="flex items-center space-x-1.5">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand-500" />
-              <span>Simple description is all you need</span>
+              <span>Tell us what you want. We'll structure the rest.</span>
             </div>
 
             <div className={`flex items-center space-x-1 font-mono text-[11px] ${isNearLimit ? 'text-amber-500 font-bold' : 'text-theme-muted'}`}>
@@ -147,9 +129,9 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
           </div>
         </div>
 
-        {/* Output Language & Quick Idea Templates Grid */}
+        {/* Output Language & Try An Example Row */}
         <div className="pt-3 border-t border-theme grid grid-cols-1 md:grid-cols-3 gap-3">
-          {/* Language Selector Column */}
+          {/* Language Selector */}
           <div className="md:col-span-1 bg-surface-elevated border border-theme p-3 rounded-xl space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-extrabold tracking-wider uppercase text-theme-secondary flex items-center space-x-1.5">
@@ -172,32 +154,25 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
                 </option>
               ))}
             </select>
-
-            <p className="text-[10px] text-theme-muted leading-tight">
-              The AI will generate the prompt in your selected language.
-            </p>
           </div>
 
-          {/* Quick Example Ideas Grid (Column 2 & 3) */}
+          {/* Try An Example Grid */}
           <div className="md:col-span-2 space-y-2">
             <div className="flex items-center space-x-1.5 text-[11px] font-bold uppercase text-theme-secondary">
               <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-              <span>TRY AN EXAMPLE IDEA</span>
+              <span>TRY AN EXAMPLE</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
               {EXAMPLE_IDEAS.map((ex) => (
                 <button
                   key={ex.title}
                   onClick={() => onChange(ex.text)}
                   type="button"
-                  className="p-2.5 rounded-xl bg-surface-elevated hover:bg-brand-500/10 border border-theme hover:border-brand-500/40 text-left transition-all group flex flex-col justify-between"
+                  className="p-2 rounded-lg bg-surface-elevated hover:bg-brand-500/10 border border-theme hover:border-brand-500/40 text-left transition-all group"
                 >
-                  <span className="text-xs font-bold text-theme-primary group-hover:text-brand-500 transition-colors block">
+                  <span className="text-[11px] font-bold text-theme-primary group-hover:text-brand-500 transition-colors block truncate">
                     {ex.title}
-                  </span>
-                  <span className="text-[11px] text-theme-secondary line-clamp-2 mt-0.5 leading-snug">
-                    "{ex.text}"
                   </span>
                 </button>
               ))}

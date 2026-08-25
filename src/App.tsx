@@ -7,9 +7,7 @@ import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { GeneratorHero } from './components/GeneratorHero';
 import { IdeaInput } from './components/IdeaInput';
-import { ProjectDetails } from './components/ProjectDetails';
 import type { ProjectDetailsState } from './components/ProjectDetails';
-import { CreativeDirection } from './components/CreativeDirection';
 import type { CreativeDirectionState } from './components/CreativeDirection';
 import { GenerateButton } from './components/GenerateButton';
 import { SampleIdeasModal } from './components/SampleIdeasModal';
@@ -21,20 +19,12 @@ import type { TemplateItem } from './components/TemplatesView';
 import { HowItWorksView } from './components/HowItWorksView';
 import { FavoritesView } from './components/FavoritesView';
 import { Toast } from './components/Toast';
-import { PromptModeSelector } from './components/PromptModeSelector';
-import { GoalSelector } from './components/GoalSelector';
-import { UXPrioritySelector } from './components/UXPrioritySelector';
-import { FeatureSelector } from './components/FeatureSelector';
-import { AdvancedOptions } from './components/AdvancedOptions';
 import { LiveProjectSummary } from './components/LiveProjectSummary';
 import { QuickPresets } from './components/QuickPresets';
-import { BrandContext } from './components/BrandContext';
-import { DesignReferences } from './components/DesignReferences';
-import { ResponsiveRequirements } from './components/ResponsiveRequirements';
-import { TechnicalStack } from './components/TechnicalStack';
-import { AIBuildRules, DEFAULT_AI_RULES } from './components/AIBuildRules';
+import { DEFAULT_AI_RULES } from './components/AIBuildRules';
 import { PromptReadiness } from './components/PromptReadiness';
 import { ConfigurationReviewModal } from './components/ConfigurationReviewModal';
+import { CustomizePrompt } from './components/CustomizePrompt';
 import { generateStructuredPrompt } from './utils/promptGenerator';
 import { requestAiGeneration } from './utils/aiClient';
 import { 
@@ -87,90 +77,82 @@ function InnerApp() {
   const [savedPrompts, setSavedPrompts] = useState<SavedPromptItem[]>(() => getSavedPrompts());
   const [favoriteIds, setFavoriteIds] = useState<string[]>(() => getFavoriteIds());
 
-  // Form State (Card 01, Card 02, Card 03)
-  const [ideaText, setIdeaText] = useState<string>('A high-converting SaaS landing page for an AI developer platform called "PulseMetrics". Features dark mode UI with interactive live dashboard previews, pricing calculator, integration logo cloud, customer ROI testimonials, and a prominent 14-day free trial CTA.');
+  // Form State (Card 01, Card 02, Card 03) — Starts completely clean with zero automatic selections
+  const [ideaText, setIdeaText] = useState<string>('');
   const [outputLanguage, setOutputLanguage] = useState<OutputLanguage | string>('English');
   
   const [projectDetails, setProjectDetails] = useState<ProjectDetailsState>({
-    websiteType: 'SaaS',
-    visualStyle: 'Modern',
-    targetAudience: 'Tech startups, software engineers, SaaS founders',
-    selectedPages: ['Hero', 'Features', 'Pricing', 'Testimonials', 'FAQ', 'Contact', 'Footer']
+    websiteType: '',
+    visualStyle: '',
+    targetAudience: '',
+    selectedPages: []
   });
 
   const [creativeDirection, setCreativeDirection] = useState<CreativeDirectionState>({
-    colorTheme: 'Dark',
-    typography: 'Modern',
-    layout: 'Minimal',
-    animation: 'Smooth'
+    colorTheme: '',
+    typography: '',
+    layout: '',
+    animation: ''
   });
 
-  // Brand Context State (Card 04)
+  // Brand Context State
   const [brandContext, setBrandContext] = useState<BrandContextState>({
-    brandName: 'PulseMetrics AI',
-    industry: 'Developer Tools & SaaS',
-    targetLocation: 'Global (North America & Europe)',
-    brandPersonality: 'Intelligent, sleek, authoritative, modern',
-    primaryCTA: 'Start 14-Day Free Trial',
-    existingColors: '#090d16 (Obsidian), #14b8a6 (Teal)',
-    referenceWebsiteUrl: 'https://v0.dev',
+    brandName: '',
+    industry: '',
+    targetLocation: '',
+    brandPersonality: '',
+    primaryCTA: '',
+    existingColors: '',
+    referenceWebsiteUrl: '',
     uploadedLogoName: null
   });
 
-  // Design References State (Card 05)
-  const [designReferences, setDesignReferences] = useState<DesignReferenceItem[]>([
-    {
-      id: 'ref-default-1',
-      title: 'Stripe Landing Grid & Card Shadows',
-      url: 'https://stripe.com',
-      notes: 'Clean typography hierarchy and elevated cards',
-      influenceAreas: ['Layout', 'Overall Style']
-    }
-  ]);
+  // Design References State
+  const [designReferences, setDesignReferences] = useState<DesignReferenceItem[]>([]);
 
-  // Responsive Requirements State (Card 06)
+  // Responsive Requirements State
   const [responsiveReq, setResponsiveReq] = useState<ResponsiveReqState>({
-    targetDevices: ['Desktop', 'Tablet', 'Mobile'],
-    responsiveFirst: true,
-    mobileNavStyle: 'Drawer',
-    mobileSpacingPriority: 'Balanced'
+    targetDevices: [],
+    responsiveFirst: false,
+    mobileNavStyle: '',
+    mobileSpacingPriority: ''
   });
 
-  // Technical Stack State (Card 07)
+  // Technical Stack State
   const [techStack, setTechStack] = useState<TechnicalStackState>({
-    framework: 'React',
-    useTypeScript: true,
-    styling: 'Tailwind',
-    componentArchitecture: 'Modular',
-    accessibilityLevel: 'WCAG 2.1 AA',
-    seoPriority: true,
-    performancePriority: true,
-    browserCompat: true
+    framework: '',
+    useTypeScript: false,
+    styling: '',
+    componentArchitecture: '',
+    accessibilityLevel: '',
+    seoPriority: false,
+    performancePriority: false,
+    browserCompat: false
   });
 
-  // AI Build Rules State (Card 08)
+  // AI Build Rules State
   const [buildRules, setBuildRules] = useState<AIBuildRulesState>({
-    rules: DEFAULT_AI_RULES,
-    customInstructions: 'Use Lucide React icons exclusively. Implement sticky top navigation with blur backdrop.'
+    rules: DEFAULT_AI_RULES.map((r) => ({ ...r, enabled: false })),
+    customInstructions: ''
   });
 
   // Advanced State
   const [advancedState, setAdvancedState] = useState<AdvancedGeneratorState>({
-    promptMode: 'Detailed',
-    websiteGoal: 'Launch a SaaS',
-    uxPriority: 'Conversion',
-    contentDirection: 'Marketing Focused',
-    selectedFeatures: ['Contact Form', 'Pricing', 'Testimonials', 'FAQ'],
-    techStack: 'No Preference',
-    buildTarget: 'Antigravity',
-    outputStyle: 'Complete Master Prompt',
+    promptMode: '' as any,
+    websiteGoal: '' as any,
+    uxPriority: '' as any,
+    contentDirection: '' as any,
+    selectedFeatures: [],
+    techStack: '' as any,
+    buildTarget: '' as any,
+    outputStyle: '' as any,
     advancedOptions: {
-      accessibility: true,
-      seo: true,
-      performance: true,
-      responsive: true,
-      animation: true,
-      browserCompat: true
+      accessibility: false,
+      seo: false,
+      performance: false,
+      responsive: false,
+      animation: false,
+      browserCompat: false
     }
   });
 
@@ -399,16 +381,16 @@ function InnerApp() {
     setIdeaText('');
     setOutputLanguage('English');
     setProjectDetails({
-      websiteType: 'SaaS',
-      visualStyle: 'Modern',
+      websiteType: '',
+      visualStyle: '',
       targetAudience: '',
-      selectedPages: ['Hero', 'Features', 'Pricing', 'Contact', 'Footer']
+      selectedPages: []
     });
     setCreativeDirection({
-      colorTheme: 'Dark',
-      typography: 'Modern',
-      layout: 'Minimal',
-      animation: 'Smooth'
+      colorTheme: '',
+      typography: '',
+      layout: '',
+      animation: ''
     });
     setBrandContext({
       brandName: '',
@@ -421,22 +403,36 @@ function InnerApp() {
       uploadedLogoName: null
     });
     setDesignReferences([]);
+    setTechStack({
+      framework: '',
+      useTypeScript: false,
+      styling: '',
+      componentArchitecture: '',
+      accessibilityLevel: '',
+      seoPriority: false,
+      performancePriority: false,
+      browserCompat: false
+    });
+    setBuildRules({
+      rules: DEFAULT_AI_RULES.map((r) => ({ ...r, enabled: false })),
+      customInstructions: ''
+    });
     setAdvancedState({
-      promptMode: 'Detailed',
-      websiteGoal: 'Launch a SaaS',
-      uxPriority: 'Conversion',
-      contentDirection: 'Marketing Focused',
-      selectedFeatures: ['Contact Form', 'Pricing', 'Testimonials', 'FAQ'],
-      techStack: 'No Preference',
-      buildTarget: 'Antigravity',
-      outputStyle: 'Complete Master Prompt',
+      promptMode: '' as any,
+      websiteGoal: '' as any,
+      uxPriority: '' as any,
+      contentDirection: '' as any,
+      selectedFeatures: [],
+      techStack: '' as any,
+      buildTarget: '' as any,
+      outputStyle: '' as any,
       advancedOptions: {
-        accessibility: true,
-        seo: true,
-        performance: true,
-        responsive: true,
-        animation: true,
-        browserCompat: true
+        accessibility: false,
+        seo: false,
+        performance: false,
+        responsive: false,
+        animation: false,
+        browserCompat: false
       }
     });
     setValidationError(null);
@@ -651,7 +647,7 @@ function InnerApp() {
 
                   {/* Main Workspace Suite */}
                   <div className="space-y-6 max-w-4xl mx-auto">
-                    {/* Quick Presets & Reset */}
+                    {/* Quick Presets & Path Controls */}
                     <QuickPresets
                       onApplyPreset={handleApplyPreset}
                       onResetAll={handleResetAll}
@@ -662,26 +658,7 @@ function InnerApp() {
                       }}
                     />
 
-                    {/* Prompt Readiness System */}
-                    <PromptReadiness
-                      ideaText={ideaText}
-                      projectDetails={projectDetails}
-                      creativeDirection={creativeDirection}
-                      brandContext={brandContext}
-                      designReferences={designReferences}
-                      responsiveReq={responsiveReq}
-                    />
-
-                    {/* Live Project Summary Panel */}
-                    <LiveProjectSummary
-                      ideaText={ideaText}
-                      outputLanguage={outputLanguage}
-                      projectDetails={projectDetails}
-                      creativeDirection={creativeDirection}
-                      advancedState={advancedState}
-                    />
-
-                    {/* Card 01: Your Website Idea */}
+                    {/* HERO ACTION AREA: What Do You Want To Build? + Output Language */}
                     <IdeaInput
                       value={ideaText}
                       onChange={handleIdeaChange}
@@ -691,90 +668,50 @@ function InnerApp() {
                       validationError={validationError}
                     />
 
-                    {/* Card 02: Project Details */}
-                    <ProjectDetails
-                      details={projectDetails}
-                      onChange={setProjectDetails}
-                    />
-
-                    {/* Card 03: Creative Direction */}
-                    <CreativeDirection
-                      direction={creativeDirection}
-                      onChange={setCreativeDirection}
-                    />
-
-                    {/* Card 04: Brand & Project Context */}
-                    <BrandContext
-                      context={brandContext}
-                      onChange={setBrandContext}
-                    />
-
-                    {/* Card 05: Design References & Inspiration */}
-                    <DesignReferences
-                      references={designReferences}
-                      onChange={setDesignReferences}
-                    />
-
-                    {/* Card 06: Responsive & Mobile Requirements */}
-                    <ResponsiveRequirements
-                      responsive={responsiveReq}
-                      onChange={setResponsiveReq}
-                    />
-
-                    {/* Card 07: Technical Stack & Implementation */}
-                    <TechnicalStack
-                      stack={techStack}
-                      onChange={setTechStack}
-                    />
-
-                    {/* Card 08: AI Behavior & Build Rules */}
-                    <AIBuildRules
-                      buildRules={buildRules}
-                      onChange={setBuildRules}
-                    />
-
-                    {/* Prompt Mode Selector */}
-                    <PromptModeSelector
-                      value={advancedState.promptMode}
-                      onChange={(mode) => setAdvancedState((prev) => ({ ...prev, promptMode: mode }))}
-                    />
-
-                    {/* Website Goal Selector */}
-                    <GoalSelector
-                      value={advancedState.websiteGoal}
-                      onChange={(goal) => setAdvancedState((prev) => ({ ...prev, websiteGoal: goal }))}
-                    />
-
-                    {/* UX Priority & Content Direction */}
-                    <UXPrioritySelector
-                      uxPriority={advancedState.uxPriority}
-                      onUXPriorityChange={(val) => setAdvancedState((prev) => ({ ...prev, uxPriority: val }))}
-                      contentDirection={advancedState.contentDirection}
-                      onContentDirectionChange={(val) => setAdvancedState((prev) => ({ ...prev, contentDirection: val }))}
-                    />
-
-                    {/* Website Features & Tech Stack */}
-                    <FeatureSelector
-                      selectedFeatures={advancedState.selectedFeatures}
-                      onToggleFeature={handleToggleFeature}
-                      techStack={advancedState.techStack}
-                      onTechStackChange={(val) => setAdvancedState((prev) => ({ ...prev, techStack: val }))}
-                      buildTarget={advancedState.buildTarget}
-                      onBuildTargetChange={(val) => setAdvancedState((prev) => ({ ...prev, buildTarget: val }))}
-                      outputStyle={advancedState.outputStyle}
-                      onOutputStyleChange={(val) => setAdvancedState((prev) => ({ ...prev, outputStyle: val }))}
-                    />
-
-                    {/* Collapsible Advanced Options */}
-                    <AdvancedOptions
-                      options={advancedState.advancedOptions}
-                      onChange={(opt) => setAdvancedState((prev) => ({ ...prev, advancedOptions: opt }))}
-                    />
-
-                    {/* Primary CTA (Triggers Review Modal) */}
+                    {/* PRIMARY HERO CTA BUTTON */}
                     <GenerateButton
                       onGenerate={handleOpenReviewModal}
                       isDisabled={false}
+                    />
+
+                    {/* Lightweight Optional Customization Counter */}
+                    <PromptReadiness
+                      ideaText={ideaText}
+                      projectDetails={projectDetails}
+                      creativeDirection={creativeDirection}
+                      brandContext={brandContext}
+                      techStackFramework={techStack.framework}
+                      websiteGoal={advancedState.websiteGoal}
+                    />
+
+                    {/* Live Project Summary Panel (Only displays specified options) */}
+                    <LiveProjectSummary
+                      ideaText={ideaText}
+                      outputLanguage={outputLanguage}
+                      projectDetails={projectDetails}
+                      creativeDirection={creativeDirection}
+                      advancedState={advancedState}
+                    />
+
+                    {/* Expandable + Customize Prompt Container (COLLAPSED BY DEFAULT!) */}
+                    <CustomizePrompt
+                      projectDetails={projectDetails}
+                      onProjectDetailsChange={setProjectDetails}
+                      creativeDirection={creativeDirection}
+                      onCreativeDirectionChange={setCreativeDirection}
+                      brandContext={brandContext}
+                      onBrandContextChange={setBrandContext}
+                      designReferences={designReferences}
+                      onDesignReferencesChange={setDesignReferences}
+                      responsiveReq={responsiveReq}
+                      onResponsiveReqChange={setResponsiveReq}
+                      techStack={techStack}
+                      onTechStackChange={setTechStack}
+                      buildRules={buildRules}
+                      onBuildRulesChange={setBuildRules}
+                      advancedState={advancedState}
+                      onAdvancedStateChange={setAdvancedState}
+                      onToggleFeature={handleToggleFeature}
                     />
                   </div>
                 </div>

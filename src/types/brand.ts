@@ -21,16 +21,16 @@ export interface DesignReferenceItem {
 export interface ResponsiveReqState {
   targetDevices: string[]; // e.g. ['Desktop', 'Tablet', 'Mobile']
   responsiveFirst: boolean;
-  mobileNavStyle: 'Drawer' | 'Hamburger' | 'Bottom Bar' | 'Minimal';
-  mobileSpacingPriority: 'Compact' | 'Balanced' | 'Spacious';
+  mobileNavStyle: 'Drawer' | 'Hamburger' | 'Bottom Bar' | 'Minimal' | '' | string;
+  mobileSpacingPriority: 'Compact' | 'Balanced' | 'Spacious' | '' | string;
 }
 
 export interface TechnicalStackState {
-  framework: 'React' | 'Next.js' | 'Vite' | 'HTML-CSS-JS';
+  framework: 'React' | 'Next.js' | 'Vite' | 'HTML-CSS-JS' | '' | string;
   useTypeScript: boolean;
-  styling: 'Tailwind' | 'CSS' | 'Custom';
-  componentArchitecture: 'Atomic' | 'Modular' | 'Single File';
-  accessibilityLevel: 'WCAG 2.1 AA' | 'WCAG 2.1 AAA' | 'Basic';
+  styling: 'Tailwind' | 'CSS' | 'Custom' | '' | string;
+  componentArchitecture: 'Atomic' | 'Modular' | 'Single File' | '' | string;
+  accessibilityLevel: 'WCAG 2.1 AA' | 'WCAG 2.1 AAA' | 'Basic' | '' | string;
   seoPriority: boolean;
   performancePriority: boolean;
   browserCompat: boolean;
