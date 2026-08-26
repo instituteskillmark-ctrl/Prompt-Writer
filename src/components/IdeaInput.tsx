@@ -63,7 +63,7 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Primary Input Container */}
+      {/* Hero Textarea Workspace Container */}
       <div className={`bg-surface border rounded-2xl p-5 sm:p-6 shadow-sm transition-all duration-200 ${
         validationError ? 'border-amber-500/80 ring-2 ring-amber-500/20' : 'border-theme focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20'
       }`}>
@@ -74,7 +74,7 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
               Describe your website idea
             </h2>
             <p className="text-xs text-theme-secondary font-normal mt-0.5">
-              No technical details required. Start with the idea.
+              Start with your core concept. Add detail only when you need it.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
             <button
               onClick={handleClear}
               type="button"
-              className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md border border-theme bg-surface hover:bg-surface-elevated text-[11px] font-medium text-theme-muted hover:text-theme-primary transition-colors"
+              className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg border border-theme bg-surface hover:bg-surface-elevated text-[11px] font-medium text-theme-muted hover:text-theme-primary transition-colors"
               title="Clear text"
             >
               <RotateCcw className="w-3 h-3" />
@@ -111,7 +111,7 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
 
           {/* Character counter */}
           <div className="mt-2 flex items-center justify-between text-xs text-theme-muted">
-            <span className="text-[11px]">Describe what you want to build. Add detail only when you need it.</span>
+            <span className="text-[11px]">No technical details required.</span>
             <span className={`font-mono text-[11px] ${isNearLimit ? 'text-amber-500 font-bold' : ''}`}>
               {charCount} / {MAX_CHARS}
             </span>
@@ -119,10 +119,10 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
         </div>
       </div>
 
-      {/* Language Selector & Examples Row */}
+      {/* Language Selector & Examples Row (Clean Open Layout, No Card Inception) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Language Selector Card */}
-        <div className="md:col-span-1 bg-surface border border-theme p-3.5 rounded-2xl space-y-1.5">
+        {/* Language Selector */}
+        <div className="md:col-span-1 bg-surface border border-theme p-3.5 rounded-xl space-y-1">
           <label className="text-[11px] font-bold uppercase tracking-wider text-theme-secondary flex items-center space-x-1.5">
             <Globe className="w-3.5 h-3.5 text-brand-500" />
             <span>Output Language</span>
@@ -130,7 +130,7 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
           <select
             value={outputLanguage}
             onChange={(e) => onLanguageChange(e.target.value as OutputLanguage)}
-            className="w-full px-3 py-2 bg-surface-elevated border border-theme rounded-xl text-xs font-semibold text-theme-primary focus:outline-none focus:border-brand-500 cursor-pointer"
+            className="w-full px-3 py-2 bg-surface-elevated border border-theme rounded-lg text-xs font-medium text-theme-primary focus:outline-none focus:border-brand-500 cursor-pointer"
           >
             {LANGUAGE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -140,13 +140,13 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
           </select>
         </div>
 
-        {/* Examples Cards */}
-        <div className="md:col-span-2 bg-surface border border-theme p-3.5 rounded-2xl space-y-2">
+        {/* Examples Pills */}
+        <div className="md:col-span-2 bg-surface border border-theme p-3.5 rounded-xl space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-theme-secondary">
               Try an example
             </span>
-            <span className="text-[10px] text-theme-muted">Click to populate</span>
+            <span className="text-[10px] text-theme-muted">Click to load idea</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -155,12 +155,12 @@ export const IdeaInput: React.FC<IdeaInputProps> = ({
                 key={ex.title}
                 onClick={() => onChange(ex.text)}
                 type="button"
-                className="p-2 rounded-xl bg-surface-elevated hover:bg-brand-500/10 border border-theme hover:border-brand-500/30 text-left transition-all group"
+                className="p-2 rounded-lg bg-surface-elevated hover:bg-brand-500/10 border border-theme hover:border-brand-500/30 text-left transition-all group"
               >
                 <span className="text-[11px] font-bold text-theme-primary group-hover:text-brand-500 block truncate">
                   {ex.title}
                 </span>
-                <span className="text-[10px] text-brand-500 font-semibold mt-0.5 block opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] text-brand-500 font-medium mt-0.5 block opacity-0 group-hover:opacity-100 transition-opacity">
                   Use this idea →
                 </span>
               </button>
