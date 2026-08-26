@@ -18,7 +18,6 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
   creativeDirection,
   advancedState
 }) => {
-  // Collect ONLY explicitly selected values
   const setupParts: string[] = [];
 
   if (ideaText.trim()) {
@@ -39,19 +38,17 @@ export const LiveProjectSummary: React.FC<LiveProjectSummaryProps> = ({
   if (advancedState.websiteGoal) {
     setupParts.push(advancedState.websiteGoal);
   }
-  if (advancedState.buildTarget) {
-    setupParts.push(advancedState.buildTarget);
-  }
 
+  const hasIdea = Boolean(ideaText.trim());
   const summaryText = setupParts.length > 0 ? setupParts.join(' · ') : 'Idea · English';
 
   return (
-    <div className="py-2.5 px-4 rounded-xl bg-surface-elevated border border-theme flex items-center justify-between text-xs">
-      <span className="font-semibold text-theme-muted uppercase tracking-wider text-[11px]">
-        Your Setup
+    <div className="py-2.5 px-4 rounded-xl bg-surface border border-theme flex items-center justify-between text-xs transition-colors">
+      <span className="font-medium text-theme-muted text-[11px]">
+        {hasIdea ? 'Your setup' : 'Ready when you are.'}
       </span>
-      <span className="font-mono font-bold text-brand-500 bg-brand-500/10 px-2.5 py-1 rounded-md border border-brand-500/20">
-        {summaryText}
+      <span className="font-mono text-[11px] font-semibold text-brand-500 bg-brand-500/10 px-2.5 py-0.5 rounded-md border border-brand-500/20">
+        {hasIdea ? summaryText : 'Start with a website idea'}
       </span>
     </div>
   );

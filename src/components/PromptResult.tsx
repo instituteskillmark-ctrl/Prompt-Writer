@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RotateCcw, Wand2 } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { PromptSectionNav } from './PromptSectionNav';
 import { PromptSummary } from './PromptSummary';
 import { PromptViewer } from './PromptViewer';
@@ -43,7 +43,6 @@ export const PromptResult: React.FC<PromptResultProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
 
-  // Show empty state if ideaText is completely empty and no custom content exists
   if (!ideaText.trim() && !promptContent.trim()) {
     return <EmptyResultState onReturnToForm={onStartOver} />;
   }
@@ -70,15 +69,15 @@ export const PromptResult: React.FC<PromptResultProps> = ({
   ];
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto pb-12 animate-fadeIn">
+    <div className="space-y-5 max-w-6xl mx-auto pb-12 animate-fadeIn">
       {/* Header & Main Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-theme">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-theme">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-theme-primary tracking-tight">
-            Generated Website Prompt
+            Your Website Prompt
           </h1>
-          <p className="text-xs text-theme-secondary mt-1">
-            Copy and paste this prompt directly into v0, Bolt, Cursor, Claude, or ChatGPT to build your website.
+          <p className="text-xs text-theme-secondary font-medium mt-0.5">
+            Your prompt is ready to build from. Copy and paste directly into v0, Bolt, Cursor, Claude, or ChatGPT.
           </p>
         </div>
 
@@ -87,30 +86,29 @@ export const PromptResult: React.FC<PromptResultProps> = ({
           <button
             onClick={onStartOver}
             type="button"
-            className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-theme bg-surface hover:bg-surface-elevated text-xs font-semibold text-theme-secondary hover:text-theme-primary transition-all active:scale-95"
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-theme bg-surface hover:bg-surface-elevated text-xs font-medium text-theme-secondary hover:text-theme-primary transition-all active:scale-95"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Start Over</span>
           </button>
 
-          <CopyButton textToCopy={promptContent} className="py-2" />
-          <DownloadButton content={promptContent} filename="website-prompt.txt" className="py-2" />
+          <CopyButton textToCopy={promptContent} className="py-1.5" />
+          <DownloadButton content={promptContent} filename="website-prompt.txt" className="py-1.5" />
         </div>
       </div>
 
       {/* Quick Prompt Modifiers Bar */}
-      <div className="bg-surface border border-theme rounded-2xl p-3.5 shadow-card space-y-2">
-        <div className="flex items-center space-x-2 pb-1.5 border-b border-theme text-xs font-semibold text-theme-primary">
-          <Wand2 className="w-3.5 h-3.5 text-brand-500" />
-          <span>Refine & Adjust Prompt Tone</span>
+      <div className="bg-surface border border-theme rounded-2xl p-3.5 space-y-2">
+        <div className="text-xs font-semibold text-theme-primary">
+          Refine Prompt Tone
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {modifierButtons.map((mod) => (
             <button
               key={mod}
               onClick={() => onApplyModifier(mod)}
               type="button"
-              className="px-2.5 py-1 rounded-lg border border-theme bg-surface-elevated hover:bg-brand-500/10 hover:border-brand-500/40 text-xs font-medium text-theme-secondary hover:text-brand-500 transition-all active:scale-95"
+              className="px-2.5 py-1 rounded-lg border border-theme bg-surface-elevated hover:bg-brand-500/10 hover:border-brand-500/30 text-xs font-medium text-theme-secondary hover:text-brand-500 transition-all active:scale-95"
             >
               {mod}
             </button>
@@ -119,7 +117,7 @@ export const PromptResult: React.FC<PromptResultProps> = ({
       </div>
 
       {/* Main Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Left Sidebar */}
         <div className="lg:col-span-4 space-y-4 order-2 lg:order-1">
           {/* Output Section Toggles */}

@@ -15,23 +15,23 @@ export const GenerateButton: React.FC<GenerateButtonProps> = ({ onGenerate, isDi
   };
 
   return (
-    <div className="pt-2 pb-4 flex flex-col items-center justify-center">
+    <div className="pt-2 pb-2 flex flex-col items-center justify-center">
       <button
         onClick={handleClick}
         disabled={isDisabled}
         type="button"
-        className={`group relative w-full sm:w-auto min-w-[280px] sm:min-w-[320px] px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide text-white transition-all duration-200 transform active:scale-[0.99] flex items-center justify-center space-x-2.5 shadow-md hover:shadow-lg cursor-pointer ${
+        className={`group relative w-full sm:w-auto min-w-[280px] sm:min-w-[320px] px-7 py-3.5 rounded-xl text-sm font-bold text-white transition-all duration-150 active:scale-[0.99] flex items-center justify-center space-x-2 shadow-sm ${
           isDisabled
             ? 'opacity-50 cursor-not-allowed bg-slate-500'
-            : 'bg-brand-600 hover:bg-brand-500 active:scale-98 border border-brand-500/30'
+            : 'bg-brand-600 hover:bg-brand-500 border border-brand-500/20'
         }`}
       >
         <span>Generate Website Prompt</span>
-        <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-200" />
+        <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform duration-150" />
       </button>
 
-      <span className="mt-2.5 text-[11px] font-medium text-theme-muted">
-        Only idea and language required. Everything else is handled automatically.
+      <span className="mt-2 text-[11px] text-theme-muted font-medium">
+        Start with the idea. Add detail only when it matters.
       </span>
     </div>
   );
