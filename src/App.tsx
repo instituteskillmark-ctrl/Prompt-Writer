@@ -22,7 +22,6 @@ import { Toast } from './components/Toast';
 import { LiveProjectSummary } from './components/LiveProjectSummary';
 import { QuickPresets } from './components/QuickPresets';
 import { DEFAULT_AI_RULES } from './components/AIBuildRules';
-import { PromptReadiness } from './components/PromptReadiness';
 import { ConfigurationReviewModal } from './components/ConfigurationReviewModal';
 import { CustomizePrompt } from './components/CustomizePrompt';
 import { generateStructuredPrompt } from './utils/promptGenerator';
@@ -111,7 +110,7 @@ function InnerApp() {
   const [designReferences, setDesignReferences] = useState<DesignReferenceItem[]>([]);
 
   // Responsive Requirements State
-  const [responsiveReq, setResponsiveReq] = useState<ResponsiveReqState>({
+  const [responsiveReq] = useState<ResponsiveReqState>({
     targetDevices: [],
     responsiveFirst: false,
     mobileNavStyle: '',
@@ -646,8 +645,8 @@ function InnerApp() {
                   <GeneratorHero />
 
                   {/* Main Workspace Suite */}
-                  <div className="space-y-6 max-w-4xl mx-auto">
-                    {/* Quick Presets & Path Controls */}
+                  <div className="space-y-5 max-w-3xl mx-auto">
+                    {/* Quick Presets Bar */}
                     <QuickPresets
                       onApplyPreset={handleApplyPreset}
                       onResetAll={handleResetAll}
@@ -674,17 +673,7 @@ function InnerApp() {
                       isDisabled={false}
                     />
 
-                    {/* Lightweight Optional Customization Counter */}
-                    <PromptReadiness
-                      ideaText={ideaText}
-                      projectDetails={projectDetails}
-                      creativeDirection={creativeDirection}
-                      brandContext={brandContext}
-                      techStackFramework={techStack.framework}
-                      websiteGoal={advancedState.websiteGoal}
-                    />
-
-                    {/* Live Project Summary Panel (Only displays specified options) */}
+                    {/* Live Setup Summary Pill */}
                     <LiveProjectSummary
                       ideaText={ideaText}
                       outputLanguage={outputLanguage}
@@ -693,7 +682,7 @@ function InnerApp() {
                       advancedState={advancedState}
                     />
 
-                    {/* Expandable + Customize Prompt Container (COLLAPSED BY DEFAULT!) */}
+                    {/* Expandable + Customize Container (COLLAPSED BY DEFAULT!) */}
                     <CustomizePrompt
                       projectDetails={projectDetails}
                       onProjectDetailsChange={setProjectDetails}
@@ -703,12 +692,8 @@ function InnerApp() {
                       onBrandContextChange={setBrandContext}
                       designReferences={designReferences}
                       onDesignReferencesChange={setDesignReferences}
-                      responsiveReq={responsiveReq}
-                      onResponsiveReqChange={setResponsiveReq}
                       techStack={techStack}
                       onTechStackChange={setTechStack}
-                      buildRules={buildRules}
-                      onBuildRulesChange={setBuildRules}
                       advancedState={advancedState}
                       onAdvancedStateChange={setAdvancedState}
                       onToggleFeature={handleToggleFeature}

@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
-import { SlidersHorizontal, ChevronDown, ChevronUp, FolderKanban, Palette, FileText, Tag, Cpu, Bot } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, ChevronUp, FolderKanban, Palette, LayoutGrid, Tag, Link2, Cpu } from 'lucide-react';
 import { ProjectDetails, type ProjectDetailsState } from './ProjectDetails';
 import { CreativeDirection, type CreativeDirectionState } from './CreativeDirection';
 import { BrandContext } from './BrandContext';
-import { TechnicalStack } from './TechnicalStack';
-import { AIBuildRules } from './AIBuildRules';
 import { GoalSelector } from './GoalSelector';
-import { UXPrioritySelector } from './UXPrioritySelector';
 import { FeatureSelector } from './FeatureSelector';
-import { PromptModeSelector } from './PromptModeSelector';
-import { AdvancedOptions } from './AdvancedOptions';
 import { DesignReferences } from './DesignReferences';
-import { ResponsiveRequirements } from './ResponsiveRequirements';
 
-import type { BrandContextState, DesignReferenceItem, ResponsiveReqState, TechnicalStackState, AIBuildRulesState } from '../types/brand';
+import type { BrandContextState, DesignReferenceItem, TechnicalStackState } from '../types/brand';
 import type { AdvancedGeneratorState } from '../types/generator';
 
 interface CustomizePromptProps {
@@ -29,14 +23,8 @@ interface CustomizePromptProps {
   designReferences: DesignReferenceItem[];
   onDesignReferencesChange: (refs: DesignReferenceItem[]) => void;
 
-  responsiveReq: ResponsiveReqState;
-  onResponsiveReqChange: (req: ResponsiveReqState) => void;
-
   techStack: TechnicalStackState;
   onTechStackChange: (stack: TechnicalStackState) => void;
-
-  buildRules: AIBuildRulesState;
-  onBuildRulesChange: (rules: AIBuildRulesState) => void;
 
   advancedState: AdvancedGeneratorState;
   onAdvancedStateChange: (updater: (prev: AdvancedGeneratorState) => AdvancedGeneratorState) => void;
@@ -53,12 +41,8 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
   onBrandContextChange,
   designReferences,
   onDesignReferencesChange,
-  responsiveReq,
-  onResponsiveReqChange,
   techStack,
   onTechStackChange,
-  buildRules,
-  onBuildRulesChange,
   advancedState,
   onAdvancedStateChange,
   onToggleFeature
@@ -70,24 +54,23 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     project: false,
     design: false,
-    content: false,
+    structure: false,
     brand: false,
-    technical: false,
-    ai: false
+    references: false,
+    tech: false
   });
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  // Count how many optional fields have been configured
+  // Count active configured fields
   const configuredCount = [
     Boolean(projectDetails.websiteType),
     Boolean(projectDetails.visualStyle),
     Boolean(projectDetails.targetAudience.trim()),
     projectDetails.selectedPages.length > 0,
     Boolean(creativeDirection.colorTheme),
-    Boolean(creativeDirection.typography),
     Boolean(creativeDirection.layout),
     Boolean(creativeDirection.animation),
     Boolean(brandContext.brandName.trim()),
@@ -110,15 +93,15 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="text-xs font-extrabold tracking-widest text-theme-primary uppercase">
-                + CUSTOMIZE PROMPT
+              <h3 className="text-xs font-bold tracking-wider text-theme-primary uppercase">
+                + Customize
               </h3>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full badge-teal font-mono">
-                OPTIONAL ({configuredCount} configured)
+              <span className="text-[10px] font-semibold text-theme-muted">
+                (Optional {configuredCount > 0 ? `· ${configuredCount} set` : ''})
               </span>
             </div>
             <p className="text-[11px] text-theme-secondary font-medium mt-0.5">
-              Add specific project, design, technical, or brand direction if desired.
+              Add specific design, brand, or technical preferences if desired.
             </p>
           </div>
         </div>
@@ -133,19 +116,19 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
 
       {/* Main Collapsible Body */}
       {isOpen && (
-        <div className="mt-6 pt-5 border-t border-theme space-y-4 animate-fadeIn">
-          {/* Section 1: PROJECT */}
+        <div className="mt-5 pt-4 border-t border-theme space-y-3 animate-fadeIn">
+          {/* Group 1: PROJECT */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
               onClick={() => toggleSection('project')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
                 <FolderKanban className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">1. PROJECT DIRECTION</span>
+                <span className="uppercase tracking-wider">PROJECT (Type, Audience, Goal)</span>
                 {projectDetails.websiteType && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
                     {projectDetails.websiteType}
                   </span>
                 )}
@@ -154,7 +137,7 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
             </button>
 
             {openSections.project && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
+              <div className="p-4 border-t border-theme space-y-4 bg-surface">
                 <ProjectDetails details={projectDetails} onChange={onProjectDetailsChange} />
                 <GoalSelector
                   value={advancedState.websiteGoal}
@@ -164,18 +147,18 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
             )}
           </div>
 
-          {/* Section 2: DESIGN */}
+          {/* Group 2: DESIGN */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
               onClick={() => toggleSection('design')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
                 <Palette className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">2. VISUAL DESIGN & MOOD</span>
+                <span className="uppercase tracking-wider">DESIGN (Style, Colors, Layout)</span>
                 {creativeDirection.colorTheme && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
                     {creativeDirection.colorTheme}
                   </span>
                 )}
@@ -184,40 +167,33 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
             </button>
 
             {openSections.design && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
+              <div className="p-4 border-t border-theme bg-surface">
                 <CreativeDirection direction={creativeDirection} onChange={onCreativeDirectionChange} />
-                <DesignReferences references={designReferences} onChange={onDesignReferencesChange} />
               </div>
             )}
           </div>
 
-          {/* Section 3: CONTENT */}
+          {/* Group 3: STRUCTURE */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
-              onClick={() => toggleSection('content')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              onClick={() => toggleSection('structure')}
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
-                <FileText className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">3. CONTENT & FEATURES</span>
+                <LayoutGrid className="w-4 h-4 text-brand-500" />
+                <span className="uppercase tracking-wider">STRUCTURE (Pages & Features)</span>
                 {advancedState.selectedFeatures.length > 0 && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono">
-                    {advancedState.selectedFeatures.length} features
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
+                    {advancedState.selectedFeatures.length} selected
                   </span>
                 )}
               </div>
-              {openSections.content ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
+              {openSections.structure ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
             </button>
 
-            {openSections.content && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
-                <UXPrioritySelector
-                  uxPriority={advancedState.uxPriority}
-                  onUXPriorityChange={(val) => onAdvancedStateChange((prev) => ({ ...prev, uxPriority: val }))}
-                  contentDirection={advancedState.contentDirection}
-                  onContentDirectionChange={(val) => onAdvancedStateChange((prev) => ({ ...prev, contentDirection: val }))}
-                />
+            {openSections.structure && (
+              <div className="p-4 border-t border-theme bg-surface">
                 <FeatureSelector
                   selectedFeatures={advancedState.selectedFeatures}
                   onToggleFeature={onToggleFeature}
@@ -232,18 +208,18 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
             )}
           </div>
 
-          {/* Section 4: BRAND */}
+          {/* Group 4: BRAND */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
               onClick={() => toggleSection('brand')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
                 <Tag className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">4. BRAND & IDENTITY</span>
+                <span className="uppercase tracking-wider">BRAND (Name, Identity & Colors)</span>
                 {brandContext.brandName && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
                     {brandContext.brandName}
                   </span>
                 )}
@@ -252,64 +228,96 @@ export const CustomizePrompt: React.FC<CustomizePromptProps> = ({
             </button>
 
             {openSections.brand && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
+              <div className="p-4 border-t border-theme bg-surface">
                 <BrandContext context={brandContext} onChange={onBrandContextChange} />
               </div>
             )}
           </div>
 
-          {/* Section 5: TECHNICAL */}
+          {/* Group 5: REFERENCES */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
-              onClick={() => toggleSection('technical')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              onClick={() => toggleSection('references')}
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
-                <Cpu className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">5. TECHNICAL STACK & SPECS</span>
-                {techStack.framework && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono">
-                    {techStack.framework}
+                <Link2 className="w-4 h-4 text-brand-500" />
+                <span className="uppercase tracking-wider">REFERENCES (URL & Inspiration)</span>
+                {designReferences.length > 0 && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
+                    {designReferences.length} links
                   </span>
                 )}
               </div>
-              {openSections.technical ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
+              {openSections.references ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
             </button>
 
-            {openSections.technical && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
-                <TechnicalStack stack={techStack} onChange={onTechStackChange} />
-                <ResponsiveRequirements responsive={responsiveReq} onChange={onResponsiveReqChange} />
-                <AdvancedOptions
-                  options={advancedState.advancedOptions}
-                  onChange={(opt) => onAdvancedStateChange((prev) => ({ ...prev, advancedOptions: opt }))}
-                />
+            {openSections.references && (
+              <div className="p-4 border-t border-theme bg-surface">
+                <DesignReferences references={designReferences} onChange={onDesignReferencesChange} />
               </div>
             )}
           </div>
 
-          {/* Section 6: AI INSTRUCTIONS */}
+          {/* Group 6: TECH */}
           <div className="border border-theme rounded-xl overflow-hidden bg-surface-elevated">
             <button
               type="button"
-              onClick={() => toggleSection('ai')}
-              className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
+              onClick={() => toggleSection('tech')}
+              className="w-full p-3.5 flex items-center justify-between text-left font-bold text-xs text-theme-primary hover:bg-brand-500/5 transition-colors"
             >
               <div className="flex items-center space-x-2.5">
-                <Bot className="w-4 h-4 text-brand-500" />
-                <span className="uppercase tracking-wider">6. AI BUILD RULES & MODE</span>
+                <Cpu className="w-4 h-4 text-brand-500" />
+                <span className="uppercase tracking-wider">TECH (Stack & Target Tool)</span>
+                {techStack.framework && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 font-mono font-bold">
+                    {techStack.framework}
+                  </span>
+                )}
               </div>
-              {openSections.ai ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
+              {openSections.tech ? <ChevronUp className="w-4 h-4 text-theme-muted" /> : <ChevronDown className="w-4 h-4 text-theme-muted" />}
             </button>
 
-            {openSections.ai && (
-              <div className="p-4 border-t border-theme space-y-5 bg-surface">
-                <PromptModeSelector
-                  value={advancedState.promptMode}
-                  onChange={(mode) => onAdvancedStateChange((prev) => ({ ...prev, promptMode: mode }))}
-                />
-                <AIBuildRules buildRules={buildRules} onChange={onBuildRulesChange} />
+            {openSections.tech && (
+              <div className="p-4 border-t border-theme bg-surface space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-semibold text-theme-primary mb-1.5 block">
+                      Target Builder
+                    </label>
+                    <select
+                      value={advancedState.buildTarget || ''}
+                      onChange={(e) => onAdvancedStateChange((prev) => ({ ...prev, buildTarget: e.target.value as any }))}
+                      className="w-full px-3 py-2 bg-surface-elevated border border-theme rounded-xl text-xs font-medium text-theme-primary focus:outline-none focus:border-brand-500"
+                    >
+                      <option value="">Auto (Any AI Builder)</option>
+                      <option value="v0.dev">v0.dev</option>
+                      <option value="Bolt.new">Bolt.new</option>
+                      <option value="Cursor">Cursor</option>
+                      <option value="Lovable">Lovable</option>
+                      <option value="Claude">Claude / ChatGPT</option>
+                      <option value="Webflow">Webflow</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-theme-primary mb-1.5 block">
+                      Preferred Framework
+                    </label>
+                    <select
+                      value={techStack.framework || ''}
+                      onChange={(e) => onTechStackChange({ ...techStack, framework: e.target.value })}
+                      className="w-full px-3 py-2 bg-surface-elevated border border-theme rounded-xl text-xs font-medium text-theme-primary focus:outline-none focus:border-brand-500"
+                    >
+                      <option value="">Auto (AI Decides)</option>
+                      <option value="React">React</option>
+                      <option value="Next.js">Next.js</option>
+                      <option value="Vite">Vite</option>
+                      <option value="HTML-CSS-JS">HTML / CSS / JS</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             )}
           </div>
