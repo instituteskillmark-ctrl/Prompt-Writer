@@ -49,7 +49,7 @@ export const QuickPresets: React.FC<QuickPresetsProps> = ({
     <div className="flex flex-wrap items-center justify-between gap-2 py-2 px-1 text-xs">
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="text-[11px] font-semibold text-theme-muted uppercase tracking-wider mr-1">
-          Preset Direction:
+          Quick starts:
         </span>
         {presets.map((p) => (
           <button

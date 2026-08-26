@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Sparkles, ArrowRight, RotateCcw, Globe } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import type { ProjectDetailsState } from './ProjectDetails';
 import type { CreativeDirectionState } from './CreativeDirection';
 import type { BrandContextState, TechnicalStackState } from '../types/brand';
@@ -32,127 +32,106 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
 }) => {
   if (!isOpen) return null;
 
+  // Collect user's explicit selections only
+  const userChoices: { label: string; value: string }[] = [];
+
+  if (brandContext.brandName) {
+    userChoices.push({ label: 'Brand Name', value: brandContext.brandName });
+  }
+  if (projectDetails.websiteType) {
+    userChoices.push({ label: 'Website Type', value: projectDetails.websiteType });
+  }
+  if (projectDetails.visualStyle) {
+    userChoices.push({ label: 'Visual Style', value: projectDetails.visualStyle });
+  }
+  if (creativeDirection.colorTheme) {
+    userChoices.push({ label: 'Color Theme', value: creativeDirection.colorTheme });
+  }
+  if (creativeDirection.layout) {
+    userChoices.push({ label: 'Layout', value: creativeDirection.layout });
+  }
+  if (advancedState.websiteGoal) {
+    userChoices.push({ label: 'Website Goal', value: advancedState.websiteGoal });
+  }
+  if (techStack.framework) {
+    userChoices.push({ label: 'Framework', value: techStack.framework });
+  }
+  if (advancedState.buildTarget) {
+    userChoices.push({ label: 'Target Builder', value: advancedState.buildTarget });
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-surface border border-theme rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+      <div className="bg-surface border border-theme rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-theme mb-4">
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-brand-500/10 text-brand-500 shadow-teal-glow">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[10px] font-extrabold tracking-widest uppercase text-brand-500 block">
-                STEP 2 OF 3 — FINAL REVIEW
-              </span>
-              <h3 className="text-base font-extrabold text-theme-primary leading-none">
-                Verify Project Configuration
-              </h3>
-            </div>
+        <div className="flex items-center justify-between pb-3 border-b border-theme mb-4">
+          <div>
+            <h3 className="text-base font-bold text-theme-primary leading-tight">
+              Ready to generate your prompt?
+            </h3>
+            <p className="text-xs text-theme-secondary font-normal mt-0.5">
+              Review your website idea before building.
+            </p>
           </div>
 
           <button
             onClick={onClose}
             type="button"
             className="p-1.5 rounded-lg text-theme-muted hover:text-theme-primary hover:bg-surface-elevated transition-colors"
+            aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Configuration Review Grid */}
-        <div className="overflow-y-auto space-y-4 pr-1 flex-1 font-mono text-xs">
+        {/* Content Body */}
+        <div className="overflow-y-auto space-y-4 pr-1 flex-1 text-xs">
           {/* Idea Excerpt */}
-          <div className="p-3.5 rounded-xl bg-surface-elevated border border-theme space-y-1">
+          <div className="p-3.5 rounded-xl bg-surface-elevated border border-theme space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-sans font-extrabold uppercase text-theme-muted">Website Idea</span>
-              <span className="text-[10px] font-bold text-brand-500 flex items-center space-x-1 font-sans">
-                <Globe className="w-3 h-3" />
-                <span>Output Language: {outputLanguage}</span>
+              <span className="text-[11px] font-semibold text-theme-muted uppercase tracking-wider">
+                YOUR IDEA
+              </span>
+              <span className="text-[11px] font-semibold text-brand-500 bg-brand-500/10 px-2 py-0.5 rounded border border-brand-500/20">
+                Language: {outputLanguage}
               </span>
             </div>
-            <p className="text-theme-primary line-clamp-3 leading-relaxed font-sans text-xs">
+            <p className="text-theme-primary leading-relaxed text-xs">
               "{ideaText || 'No description specified'}"
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Brand Name</span>
-              <span className="font-bold text-theme-primary truncate block">{brandContext.brandName || 'Auto (AI Decides)'}</span>
-            </div>
+          {/* Optional Direction (Selected Items Only) */}
+          <div className="space-y-2">
+            <span className="text-[11px] font-semibold text-theme-muted uppercase tracking-wider block">
+              OPTIONAL DIRECTION
+            </span>
 
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Website Type</span>
-              <span className="font-bold text-theme-primary truncate block">{projectDetails.websiteType || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Visual Style</span>
-              <span className="font-bold text-theme-primary truncate block">{projectDetails.visualStyle || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Theme Mode</span>
-              <span className="font-bold text-theme-primary truncate block">{creativeDirection.colorTheme || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme border-brand-500/30 bg-brand-500/5">
-              <span className="text-[10px] text-brand-500 block font-sans uppercase font-bold">Output Language</span>
-              <span className="font-bold text-theme-primary truncate block">{outputLanguage}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Goal</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.websiteGoal || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">UX Priority</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.uxPriority || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Framework</span>
-              <span className="font-bold text-theme-primary truncate block">{techStack.framework || 'Auto (AI Decides)'}</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-surface-elevated border border-theme">
-              <span className="text-[10px] text-theme-muted block font-sans uppercase font-bold">Build Target</span>
-              <span className="font-bold text-theme-primary truncate block">{advancedState.buildTarget || 'Auto (AI Decides)'}</span>
-            </div>
-          </div>
-
-          {/* Selected Pages & Features */}
-          <div className="p-3.5 rounded-xl bg-surface-elevated border border-theme space-y-2">
-            <span className="text-[10px] font-sans font-extrabold uppercase text-theme-muted block">Configured Pages & Features</span>
-            <div className="flex flex-wrap gap-1.5 font-sans">
-              {projectDetails.selectedPages.length === 0 && advancedState.selectedFeatures.length === 0 && (
-                <span className="text-xs text-theme-muted italic">Auto (AI Decides based on website idea)</span>
-              )}
-              {projectDetails.selectedPages.map((p) => (
-                <span key={p} className="px-2 py-0.5 rounded badge-teal text-[10px] font-bold">
-                  {p}
-                </span>
-              ))}
-              {advancedState.selectedFeatures.map((f) => (
-                <span key={f} className="px-2 py-0.5 rounded bg-surface border border-theme text-[10px] text-theme-secondary font-medium">
-                  {f}
-                </span>
-              ))}
-            </div>
+            {userChoices.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2">
+                {userChoices.map((c) => (
+                  <div key={c.label} className="p-2.5 rounded-lg bg-surface-elevated border border-theme">
+                    <span className="text-[10px] text-theme-muted block">{c.label}</span>
+                    <span className="font-semibold text-theme-primary truncate block">{c.value}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-3 rounded-lg bg-surface-elevated border border-theme text-theme-secondary text-xs leading-relaxed">
+                We'll make sensible design decisions based on your idea.
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer Actions (Simple Primary + Secondary) */}
         <div className="pt-4 border-t border-theme mt-4 flex items-center justify-between">
           <button
             onClick={onClose}
             type="button"
-            className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl border border-theme bg-surface hover:bg-surface-elevated text-xs font-semibold text-theme-secondary hover:text-theme-primary transition-colors"
+            className="px-4 py-2 rounded-xl border border-theme bg-surface hover:bg-surface-elevated text-xs font-semibold text-theme-secondary hover:text-theme-primary transition-colors"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Edit Configuration</span>
+            Edit
           </button>
 
           <button
@@ -161,10 +140,9 @@ export const ConfigurationReviewModal: React.FC<ConfigurationReviewModalProps> =
               onConfirmGenerate();
             }}
             type="button"
-            className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-500 hover:to-teal-400 text-white font-extrabold text-xs shadow-teal-glow transition-all active:scale-95 uppercase tracking-wider"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-sm transition-all"
           >
-            <Sparkles className="w-4 h-4" />
-            <span>✦ CONFIRM & GENERATE PROMPT</span>
+            <span>Generate Website Prompt</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

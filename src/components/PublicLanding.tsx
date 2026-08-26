@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { 
-  Zap,
-  Sparkles,
   ArrowRight, 
-  LogOut, 
-  ShieldCheck
+  LogOut,
+  Layers,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
 import { GeneratorHero } from './GeneratorHero';
 import { ThemeToggle } from './ThemeToggle';
@@ -31,106 +31,106 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
   return (
     <div className="min-h-screen bg-surface-gradient text-theme-primary selection:bg-brand-500/30 selection:text-brand-400 font-sans transition-colors duration-300 flex flex-col justify-between">
       
-      {/* Public Landing Navigation Bar */}
-      <header className="sticky top-0 z-30 w-full bg-surface/80 backdrop-blur-md border-b border-theme px-4 sm:px-6 py-4 transition-colors">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
+      {/* Navigation Bar */}
+      <header className="sticky top-0 z-30 w-full bg-surface/80 backdrop-blur-md border-b border-theme px-4 sm:px-6 py-3 transition-colors">
+        <div className="flex items-center justify-between max-w-6xl mx-auto">
           
           {/* Brand Header */}
           <div 
             onClick={() => setLandingTab('home')}
-            className="flex items-center space-x-3 cursor-pointer group"
+            className="flex items-center space-x-2.5 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-teal-glow text-white transition-transform duration-300 group-hover:scale-105">
-              <Zap className="w-5 h-5 fill-current text-white" />
+            <div className="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center font-bold shadow-sm">
+              <Layers className="w-4 h-4 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-extrabold tracking-widest text-theme-primary uppercase leading-none">
-                WEBSITE
+              <span className="text-xs font-bold tracking-tight text-theme-primary leading-none">
+                Website Prompt
               </span>
-              <span className="text-xs font-semibold tracking-widest text-brand-500 uppercase leading-tight mt-1">
-                PROMPT GENERATOR
+              <span className="text-[10px] font-medium text-theme-muted mt-0.5">
+                Generator
               </span>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 border border-theme bg-surface-elevated/70 p-1 rounded-xl">
+          <nav className="hidden md:flex items-center space-x-1 border border-theme bg-surface-elevated/70 p-1 rounded-xl text-xs font-medium">
             <button
               onClick={() => setLandingTab('home')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 landingTab === 'home' 
-                  ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30' 
-                  : 'text-slate-700 dark:text-slate-300 font-semibold hover:text-teal-600 dark:hover:text-teal-300'
+                  ? 'bg-brand-500/10 text-brand-500 font-semibold' 
+                  : 'text-theme-secondary hover:text-theme-primary'
               }`}
             >
               Overview
             </button>
             <button
               onClick={() => setLandingTab('examples')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 landingTab === 'examples' 
-                  ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30' 
-                  : 'text-slate-700 dark:text-slate-300 font-semibold hover:text-teal-600 dark:hover:text-teal-300'
+                  ? 'bg-brand-500/10 text-brand-500 font-semibold' 
+                  : 'text-theme-secondary hover:text-theme-primary'
               }`}
             >
               Examples
             </button>
             <button
               onClick={() => setLandingTab('templates')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 landingTab === 'templates' 
-                  ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30' 
-                  : 'text-slate-700 dark:text-slate-300 font-semibold hover:text-teal-600 dark:hover:text-teal-300'
+                  ? 'bg-brand-500/10 text-brand-500 font-semibold' 
+                  : 'text-theme-secondary hover:text-theme-primary'
               }`}
             >
               Templates
             </button>
             <button
               onClick={() => setLandingTab('how-it-works')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 landingTab === 'how-it-works' 
-                  ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold border border-teal-500/30' 
-                  : 'text-slate-700 dark:text-slate-300 font-semibold hover:text-teal-600 dark:hover:text-teal-300'
+                  ? 'bg-brand-500/10 text-brand-500 font-semibold' 
+                  : 'text-theme-secondary hover:text-theme-primary'
               }`}
             >
-              How It Works
+              Guide
             </button>
           </nav>
 
-          {/* Right Action Buttons */}
+          {/* Right Actions */}
           <div className="flex items-center space-x-3">
             <ThemeToggle theme={theme} onToggle={onToggleTheme} variant="compact" />
 
             {session ? (
-              <div className="flex items-center space-x-3 pl-2 border-l border-theme">
+              <div className="flex items-center space-x-2 pl-2 border-l border-theme">
                 <button
                   onClick={() => onNavigate('/workspace')}
-                  className="py-2 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-teal-500 text-white text-xs font-bold shadow-teal-glow transition-all flex items-center space-x-2 hover:-translate-y-0.5"
+                  className="py-2 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-sm transition-all flex items-center space-x-1.5"
                 >
-                  <Sparkles className="w-4 h-4" />
                   <span>Open Workspace</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => signOut()}
                   title="Sign Out"
-                  className="p-2 rounded-xl border border-theme bg-surface hover:bg-rose-500/10 hover:border-rose-500/30 text-theme-secondary hover:text-rose-500 transition-colors"
+                  className="p-2 rounded-lg border border-theme bg-surface hover:bg-rose-500/10 text-theme-muted hover:text-rose-500 transition-colors"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-3.5 h-3.5" />
                 </button>
               </div>
             ) : (
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => onNavigate('/login')}
-                  className="px-3.5 py-2 rounded-xl text-xs font-bold text-theme-primary hover:bg-surface-elevated border border-theme transition-colors cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl text-xs font-medium text-theme-primary hover:bg-surface-elevated border border-theme transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => onNavigate('/signup')}
-                  className="py-2 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-extrabold shadow-sm transition-all flex items-center space-x-1.5 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                  className="py-2 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-sm transition-all flex items-center space-x-1.5 cursor-pointer"
                 >
-                  <span>Create Account</span>
+                  <span>Get Started</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -140,73 +140,66 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         </div>
       </header>
 
-      {/* Landing Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
         
         {landingTab === 'home' && (
-          <div className="space-y-12 animate-fadeIn">
+          <div className="space-y-10 animate-fadeIn">
             {/* Hero Section */}
             <GeneratorHero />
 
-            {/* CTA Banner Section */}
-            <div className="bg-surface border border-theme rounded-2xl p-8 shadow-card text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-600 via-teal-400 to-brand-500" />
-              
-              <div className="max-w-2xl mx-auto space-y-4">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full badge-teal text-xs font-semibold">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Real Supabase Auth & Real Gemini AI</span>
-                </div>
-                
-                <h2 className="text-2xl font-bold tracking-tight text-theme-primary">
-                  Ready to Generate Production-Grade Prompts?
+            {/* CTA Workspace Banner */}
+            <div className="bg-surface border border-theme rounded-2xl p-8 shadow-sm text-center relative overflow-hidden">
+              <div className="max-w-xl mx-auto space-y-4">
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-theme-primary">
+                  Turn your website idea into a prompt worth building from.
                 </h2>
                 
                 <p className="text-xs text-theme-secondary leading-relaxed">
-                  Access the full interactive workspace to configure brand context, technical stack, UX priorities, responsive requirements, and AI build rules.
+                  Describe what you want to build. Add detail only when you need it.
                 </p>
 
-                <div className="pt-2 flex items-center justify-center space-x-4">
+                <div className="pt-2 flex items-center justify-center">
                   <button
                     onClick={() => onNavigate('/workspace')}
-                    className="py-3 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-teal-500 text-white text-xs font-bold shadow-teal-glow hover:shadow-lg transition-all duration-200 flex items-center space-x-2 hover:-translate-y-0.5"
+                    className="py-3 px-6 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-sm transition-all flex items-center space-x-2"
                   >
-                    <span>Launch Prompt Generator Workspace</span>
+                    <span>Open Workspace</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Feature Highlights Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-surface border border-theme rounded-2xl p-6 space-y-3 shadow-card">
-                <div className="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center border border-brand-500/20">
-                  <Sparkles className="w-5 h-5" />
+            {/* 3 Simple Product Benefits Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="bg-surface border border-theme rounded-2xl p-5 space-y-2 shadow-sm">
+                <div className="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center">
+                  <Layers className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-theme-primary">Structured AI Specifications</h3>
+                <h3 className="text-xs font-bold text-theme-primary">Start with an idea</h3>
                 <p className="text-xs text-theme-secondary leading-relaxed">
-                  Generate complete master prompts with role definition, visual design rules, typography hierarchy, page structure, and technical stack specifications.
+                  Describe the website you have in mind in your own words. No complex technical specifications required.
                 </p>
               </div>
 
-              <div className="bg-surface border border-theme rounded-2xl p-6 space-y-3 shadow-card">
-                <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center border border-teal-500/20">
-                  <ShieldCheck className="w-5 h-5" />
+              <div className="bg-surface border border-theme rounded-2xl p-5 space-y-2 shadow-sm">
+                <div className="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center">
+                  <Sliders className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-theme-primary">Protected Workspace & Auth</h3>
+                <h3 className="text-xs font-bold text-theme-primary">Add detail when you need it</h3>
                 <p className="text-xs text-theme-secondary leading-relaxed">
-                  Powered by real Supabase Authentication with session persistence, route protection, and instant account security.
+                  Customize style, color, layout, structure, and target builder only when you want additional control.
                 </p>
               </div>
 
-              <div className="bg-surface border border-theme rounded-2xl p-6 space-y-3 shadow-card">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
-                  <Zap className="w-5 h-5" />
+              <div className="bg-surface border border-theme rounded-2xl p-5 space-y-2 shadow-sm">
+                <div className="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-500 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm font-bold text-theme-primary">Server-Side Gemini AI</h3>
+                <h3 className="text-xs font-bold text-theme-primary">Get a build-ready prompt</h3>
                 <p className="text-xs text-theme-secondary leading-relaxed">
-                  Secure server endpoint calling Gemini 3.6 Flash without exposing secret keys or credentials to the browser.
+                  Receive a clean, structured master prompt formatted for v0, Bolt, Cursor, Claude, or ChatGPT.
                 </p>
               </div>
             </div>
@@ -243,11 +236,11 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-theme py-6 text-center text-xs text-theme-muted">
-        <p>&copy; {new Date().getFullYear()} Website Prompt Generator &bull; Built with React, Supabase & Gemini AI</p>
+      <footer className="w-full border-t border-theme py-6 text-center text-xs text-theme-muted space-y-1">
+        <p className="font-semibold text-theme-primary">Website Prompt Generator</p>
+        <p className="text-theme-muted">Turn ideas into build-ready website prompts.</p>
       </footer>
 
     </div>
   );
 };
-
