@@ -570,7 +570,7 @@ function InnerApp() {
     // Save prompt to local storage history
     const newSavedPrompt: SavedPromptItem = {
       id: `prompt-${Date.now()}`,
-      title: `${brandContext.brandName || projectDetails.websiteType} — ${projectDetails.visualStyle} Website`,
+      title: `${brandContext.brandName || projectDetails.websiteType || 'Website'} Prompt`,
       text: generatedText,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
       websiteType: projectDetails.websiteType,
@@ -729,6 +729,32 @@ function InnerApp() {
                   onApplyModifier={handleApplyModifier}
                   onUpdatePromptContent={setPromptContent}
                   onStartOver={handleStartOver}
+                  onSavePrompt={() => {
+                    const newSavedPrompt: SavedPromptItem = {
+                      id: `prompt-${Date.now()}`,
+                      title: `${brandContext.brandName || projectDetails.websiteType || 'Website'} Prompt`,
+                      text: promptContent,
+                      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                      websiteType: projectDetails.websiteType,
+                      visualStyle: projectDetails.visualStyle,
+                      creativeDirection: { ...creativeDirection }
+                    };
+                    const updatedPrompts = savePrompt(newSavedPrompt);
+                    setSavedPrompts(updatedPrompts);
+                    if (session) {
+                      savePromptToDb(newSavedPrompt, {
+                        ideaText,
+                        customIdea: ideaText,
+                        outputLanguage,
+                        projectDetails,
+                        creativeDirection,
+                        brandContext,
+                        techStack,
+                        advancedState
+                      });
+                    }
+                    showToast('Prompt saved to My Prompts!');
+                  }}
                 />
               )}
             </>
