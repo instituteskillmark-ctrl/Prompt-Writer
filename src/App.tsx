@@ -50,7 +50,6 @@ import type {
   AIBuildRulesState, 
   ResultModifierType 
 } from './types/brand';
-import { Sparkles } from 'lucide-react';
 
 function InnerApp() {
   const { session, loading } = useAuth();
@@ -704,15 +703,13 @@ function InnerApp() {
 
               {/* 2. Transition State */}
               {viewMode === 'transition' && (
-                <div className="py-24 text-center space-y-4 max-w-md mx-auto animate-pulse-subtle">
-                  <div className="w-14 h-14 rounded-2xl bg-brand-500/10 text-brand-500 flex items-center justify-center mx-auto shadow-teal-glow">
-                    <Sparkles className="w-7 h-7" />
-                  </div>
-                  <h2 className="text-lg font-extrabold text-theme-primary">
-                    Preparing your website prompt...
+                <div className="py-24 text-center space-y-4 max-w-md mx-auto animate-fadeIn">
+                  <div className="w-10 h-10 rounded-full border-2 border-brand-500 border-t-transparent animate-spin mx-auto" />
+                  <h2 className="text-base font-bold text-theme-primary">
+                    Building your prompt...
                   </h2>
                   <p className="text-xs text-theme-secondary">
-                    Formatting project details and creative direction into structured sections.
+                    Structuring your website idea and direction.
                   </p>
                 </div>
               )}
