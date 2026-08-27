@@ -147,7 +147,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         if (msg.includes('already registered')) {
           setErrorMsg('An account with this email already exists. Try logging in.');
         } else if (msg.includes('rate limit') || msg.includes('over_email_send_rate_limit')) {
-          setErrorMsg('Email rate limit exceeded. Please wait a few minutes or disable email confirmation in Supabase Dashboard.');
+          setErrorMsg('Rate limit exceeded. Please wait a few minutes and try again.');
         } else if (msg.includes('Failed to fetch') || msg.includes('fetch')) {
           setErrorMsg('Failed to connect to authentication server. Please check your Supabase Environment Variables on Vercel.');
         } else {
@@ -157,7 +157,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({
         if (data?.session) {
           setSuccessMsg('Account created successfully! Redirecting to workspace...');
         } else {
-          setSuccessMsg('Account created! Please check your email to confirm your sign up.');
+          // Immediately establish authenticated session if not returned directly by signUp
+          const { error: signInErr } = await signIn(email.trim(), password);
+          if (signInErr) {
+            setErrorMsg(signInErr.message || 'Account created, but failed to log in automatically.');
+          } else {
+            setSuccessMsg('Account created successfully! Redirecting to workspace...');
+          }
         }
       }
     } catch (err: any) {
